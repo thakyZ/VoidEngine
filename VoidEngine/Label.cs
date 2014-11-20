@@ -10,11 +10,18 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace myFirstXNAGame
+namespace VoidEngine
 {
-    class Label
+    /// <summary>
+    /// The Label class for the VoidEngine
+    /// </summary>
+    public class Label
     {
-        Label()
+        /// <summary>
+        /// Creates the Label.
+        /// </summary>
+        /// <param name="text">The text that will be in the label.</param>
+        public Label(string text)
         {
         }
     }
