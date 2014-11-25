@@ -17,22 +17,25 @@ namespace VoidEngine
     /// </summary>
     public class Sprite
     {
-        protected Point frameSize;
-        protected Point sheetSize;
-        protected int fTime;
-        protected Texture2D texture;
+        public struct AnimationSet
+        {
+            public string name;
+            public Texture2D texture;
+            public Point frameSize;
+            public Point sheetSize;
+            public int fps;
+            public Point startPos;
+        }
+
+        public AnimationSet currentAnimation;
+        public List<AnimationSet> animationSets = new List<AnimationSet>();
+
         protected Vector2 position;
 
         protected Point currentFrame;
         protected int lFTime;
 
         protected KeyboardState keyboardState, pKeyboardState;
-        protected bool move;
-        protected int speed;
-        protected Keys up;
-        protected Keys down;
-        protected Keys left;
-        protected Keys right;
 
         /// <summary>
         /// Creates the sprite with custom properties
@@ -44,61 +47,9 @@ namespace VoidEngine
         /// <param name="sheetWidth">the amount of frames, widthwise</param>
         /// <param name="sheetHeight">the ammount of frames, height wise</param>
         /// <param name="fps">the frames per milliseconds</param>
-        public Sprite(Texture2D tex, Vector2 pos, int frameWidth, int frameHeight, int sheetWidth, int sheetHeight, int fps)
+        public Sprite(Vector2 position)
         {
-            texture = tex;
-            position = pos;
-            move = false;
-
-            currentFrame = Point.Zero;
-            lFTime = 0;
-        }
-
-        /// <summary>
-        /// Creates the sprite with custom properties, and makes the sprite able to move
-        /// </summary>
-        /// <param name="tex">The texture</param>
-        /// <param name="pos">the position</param>
-        /// <param name="frameWidth">the width of each frame</param>
-        /// <param name="frameHeight">the height of each frame</param>
-        /// <param name="sheetWidth">the amount of frames, widthwise</param>
-        /// <param name="sheetHeight">the ammount of frames, height wise</param>
-        /// <param name="fps">the frames per milliseconds</param>
-        /// <param name="sp">the speed the sprite moves</param>
-        public Sprite(Texture2D tex, Vector2 pos, int frameWidth, int frameHeight, int sheetWidth, int sheetHeight, int fps, int sp, Keys u, Keys d, Keys l, Keys r)
-        {
-            texture = tex;
-            position = pos;
-            speed = sp;
-            move = true;
-            up = u;
-            down = d;
-            left = l;
-            right = r;
-
-            currentFrame = Point.Zero;
-            lFTime = 0;
-        }
-
-        /// <summary>
-        /// Create the sprite with default properties.
-        /// frameSize = (60, 50)
-        /// sheetSize = (5, 6)
-        /// fTime = 16
-        /// </summary>
-        /// <param name="tex">The texture for the sprite</param>
-        /// <param name="pos">The position for the sprite</param>
-        public Sprite(Texture2D tex, Vector2 pos)
-        {
-            frameSize = new Point(60, 50);
-            sheetSize = new Point(5, 6);
-            fTime = 16;
-            move = false;
-
-            texture = tex;
-            position = pos;
-
-            currentFrame = Point.Zero;
+            this.position = position;
             lFTime = 0;
         }
 
@@ -108,23 +59,20 @@ namespace VoidEngine
         /// <param name="gameTime">The main GameTime</param>
         public virtual void Update(GameTime gameTime)
         {
-            if (move == true)
-            {
-                keyboardState = Keyboard.GetState();
-            }
+            keyboardState = Keyboard.GetState();
 
             lFTime += gameTime.ElapsedGameTime.Milliseconds;
 
-            if (lFTime >= fTime)
+            if (lFTime >= currentAnimation.fps)
             {
                 currentFrame.X++;
 
-                if (currentFrame.X >= sheetSize.X)
+                if (currentFrame.X >= currentAnimation.sheetSize.X)
                 {
                     currentFrame.Y++;
                     currentFrame.X = 0;
 
-                    if (currentFrame.Y >= sheetSize.Y)
+                    if (currentFrame.Y >= currentAnimation.sheetSize.Y)
                     {
                         currentFrame.Y = 0;
                     }
@@ -145,7 +93,37 @@ namespace VoidEngine
         /// <param name="spriteBatch">The main SpriteBatch</param>
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+            spriteBatch.Draw(currentAnimation.texture, this.position, new Rectangle(currentFrame.X * currentAnimation.frameSize.X, currentFrame.Y * currentAnimation.frameSize.Y, currentAnimation.frameSize.X, currentAnimation.frameSize.Y), Color.White);
         }
+
+        public void Addanimation(string name, Texture2D tex, Point frameSize, Point sheetsize, Point startPos, int millisecondsPerFrame)
+        {
+            AnimationSet tmpAni;
+            tmpAni.name = name;
+            tmpAni.texture = tex;
+            tmpAni.frameSize = frameSize;
+            tmpAni.sheetSize = sheetsize;
+            tmpAni.startPos = startPos;
+            tmpAni.fps = millisecondsPerFrame;
+            animationSets.Add(tmpAni);
+        }
+
+        public void SetAnimation(string setName)
+        {
+            if (currentAnimation.name != setName)
+            {
+                foreach (AnimationSet a in animationSets)
+                {
+                    if (a.name == setName)
+                    {
+                        currentAnimation = a;
+                        currentFrame = Point.Zero;
+                    }
+                }
+            }
+        }
+
+        public virtual void AddAnimations(Texture2D tex)
+        { }
     }
 }
