@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,23 +17,15 @@ namespace VoidEngine
     /// </summary>
     public class TwoAnimation : Sprite
     {
-        /// <summary>
-        /// The creator of TwoAnimation class with default properties
-        /// frameSize = (60, 50)
-        /// sheetSize = (5, 6)
-        /// fTime = 16
-        /// </summary>
-        /// <param name="tex">The texture</param>
-        /// <param name="pos">The position</param>
-        public TwoAnimation(Texture2D tex, Vector2 pos) : base(tex, pos)
-        {
-            frameSize = new Point(60, 50);
-            sheetSize = new Point(5, 6);
-            fTime = 16;
-        }
+        protected bool move;
+        protected int speed;
+        protected Keys up;
+        protected Keys down;
+        protected Keys left;
+        protected Keys right;
 
         /// <summary>
-        /// The creator of TwoAnimation class with custom properties
+        /// The creator of TwoAnimation class.
         /// </summary>
         /// <param name="tex">The texture</param>
         /// <param name="pos">The position</param>
@@ -42,11 +34,8 @@ namespace VoidEngine
         /// <param name="sheetWidth">The amount of frames on the x axis</param>
         /// <param name="sheetHeight">The amount of frames on the y axis</param>
         /// <param name="fps">The frames per second in miliseconds</param>
-        public TwoAnimation(Texture2D tex, Vector2 pos, int frameWidth, int frameHeight, int sheetWidth, int sheetHeight, int fps) : base(tex, pos, frameWidth, frameHeight, sheetWidth, sheetHeight, fps)
+        public TwoAnimation(Vector2 position) : base(position)
         {
-            frameSize = new Point(frameWidth, frameHeight);
-            sheetSize = new Point(sheetWidth, sheetHeight);
-            fTime = fps;
         }
 
         public override void Update(GameTime gameTime)
@@ -57,6 +46,17 @@ namespace VoidEngine
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(gameTime, spriteBatch);
+        }
+
+        public override void AddAnimations(Texture2D tex)
+        {
+            Addanimation("IDLE", tex, new Point(60, 50), new Point(1, 1), new Point(0, 0), 16);
+            Addanimation("WALK", tex, new Point(60, 50), new Point(3, 4), new Point(0, 60), 16);
+            Addanimation("BLOCK", tex, new Point(60, 50), new Point(2, 2), new Point(150, 200), 16);
+            Addanimation("SHOOT", tex, new Point(60, 50), new Point(1, 3), new Point(240, 0), 16);
+            Addanimation("JUMP", tex, new Point(60, 50), new Point(5, 1), new Point(0, 150), 16);
+            Addanimation("SWING", tex, new Point(60, 50), new Point(3, 2), new Point(0, 200), 16);
+            SetAnimation("IDLE");
         }
     }
 }
