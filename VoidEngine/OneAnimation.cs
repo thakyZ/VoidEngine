@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,20 +17,26 @@ namespace VoidEngine
     /// </summary>
     public class OneAnimation : Sprite
     {
+        protected bool move;
+        protected int speed;
+        protected Keys up;
+        protected Keys down;
+        protected Keys left;
+        protected Keys right;
+
         /// <summary>
-        /// The creator of OneAnimation class with default properties
-        /// frameSize = (60, 50)
-        /// sheetSize = (5, 6)
-        /// fTime = 16
+        /// The creator of OneAnimation class with custom properties
         /// </summary>
         /// <param name="tex">The texture</param>
         /// <param name="pos">The position</param>
-        public OneAnimation(Texture2D tex, Vector2 pos) : base(tex, pos)
+        /// <param name="frameWidth">The frame's width</param>
+        /// <param name="frameHeight">The frame's Height</param>
+        /// <param name="sheetWidth">The amount of frames on the x axis</param>
+        /// <param name="sheetHeight">The amount of frames on the y axis</param>
+        /// <param name="fps">The frames per second in miliseconds</param>
+        public OneAnimation(Vector2 position) : base(position)
         {
-            frameSize = new Point(60, 50);
-            sheetSize = new Point(5, 6);
             move = false;
-            fTime = 16;
         }
 
         /// <summary>
@@ -43,35 +49,14 @@ namespace VoidEngine
         /// <param name="sheetWidth">The amount of frames on the x axis</param>
         /// <param name="sheetHeight">The amount of frames on the y axis</param>
         /// <param name="fps">The frames per second in miliseconds</param>
-        public OneAnimation(Texture2D tex, Vector2 pos, int frameWidth, int frameHeight, int sheetWidth, int sheetHeight, int fps) : base(tex, pos, frameWidth, frameHeight, sheetWidth, sheetHeight, fps)
+        public OneAnimation(Vector2 position, int speed, Keys up, Keys down, Keys left, Keys right) : base(position)
         {
-            frameSize = new Point(frameWidth, frameHeight);
-            sheetSize = new Point(sheetWidth, sheetHeight);
-            move = false;
-            fTime = fps;
-        }
-
-        /// <summary>
-        /// The creator of OneAnimation class with custom properties
-        /// </summary>
-        /// <param name="tex">The texture</param>
-        /// <param name="pos">The position</param>
-        /// <param name="frameWidth">The frame's width</param>
-        /// <param name="frameHeight">The frame's Height</param>
-        /// <param name="sheetWidth">The amount of frames on the x axis</param>
-        /// <param name="sheetHeight">The amount of frames on the y axis</param>
-        /// <param name="fps">The frames per second in miliseconds</param>
-        public OneAnimation(Texture2D tex, Vector2 pos, int frameWidth, int frameHeight, int sheetWidth, int sheetHeight, int fps, int sp, Keys u, Keys d, Keys l, Keys r) : base(tex, pos, frameWidth, frameHeight, sheetWidth, sheetHeight, fps, sp, u, d, l, r)
-        {
-            frameSize = new Point(frameWidth, frameHeight);
-            sheetSize = new Point(sheetWidth, sheetHeight);
             move = true;
-            fTime = fps;
-            speed = sp;
-            up = u;
-            down = d;
-            left = l;
-            right = r;
+            this.speed = speed;
+            this.up = up;
+            this.down = down;
+            this.left = left;
+            this.right = right;
         }
 
         public override void Update(GameTime gameTime)
@@ -99,17 +84,17 @@ namespace VoidEngine
                 {
                     position.Y = 0;
                 }
-                if (position.Y >= 480 - frameSize.Y)
+                if (position.Y >= 480 - currentAnimation.frameSize.Y)
                 {
-                    position.Y = 480 - frameSize.Y;
+                    position.Y = 480 - currentAnimation.frameSize.Y;
                 }
                 if (position.X <= 0)
                 {
                     position.X = 0;
                 }
-                if (position.X >= 480 - frameSize.X)
+                if (position.X >= 480 - currentAnimation.frameSize.X)
                 {
-                    position.X = 480 - frameSize.X;
+                    position.X = 480 - currentAnimation.frameSize.X;
                 }
             }
 
