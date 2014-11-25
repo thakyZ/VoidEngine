@@ -17,13 +17,6 @@ namespace VoidEngine
     /// </summary>
     public class TwoAnimation : Sprite
     {
-        protected bool move;
-        protected int speed;
-        protected Keys up;
-        protected Keys down;
-        protected Keys left;
-        protected Keys right;
-
         /// <summary>
         /// The creator of TwoAnimation class.
         /// </summary>
