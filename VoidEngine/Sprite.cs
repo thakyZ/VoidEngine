@@ -32,6 +32,8 @@ namespace VoidEngine
 
         protected Vector2 position;
 
+        public float speed;
+
         protected Point currentFrame;
         protected int lFTime;
 
@@ -93,7 +95,7 @@ namespace VoidEngine
         /// <param name="spriteBatch">The main SpriteBatch</param>
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(currentAnimation.texture, this.position, new Rectangle(currentFrame.X * currentAnimation.frameSize.X, currentFrame.Y * currentAnimation.frameSize.Y, currentAnimation.frameSize.X, currentAnimation.frameSize.Y), Color.White);
+            spriteBatch.Draw(currentAnimation.texture, this.position, new Rectangle(currentAnimation.startPos.X + (currentFrame.X * currentAnimation.frameSize.X), currentAnimation.startPos.Y + (currentFrame.Y * currentAnimation.frameSize.Y), currentAnimation.frameSize.X, currentAnimation.frameSize.Y), Color.White);
         }
 
         public void Addanimation(string name, Texture2D tex, Point frameSize, Point sheetsize, Point startPos, int millisecondsPerFrame)
@@ -123,7 +125,12 @@ namespace VoidEngine
             }
         }
 
-        public virtual void AddAnimations(Texture2D tex)
+        public virtual void AddAnimations(Texture2D texture)
         { }
+
+        public Rectangle collisionRect()
+        {
+            return new Rectangle((int)position.X, (int)position.Y, currentAnimation.frameSize.X, currentAnimation.frameSize.Y);
+        }
     }
 }
