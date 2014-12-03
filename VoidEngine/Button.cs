@@ -15,20 +15,15 @@ namespace VoidEngine
     /// <summary>
     /// The Button class for the Void Engine
     /// </summary>
-    public class Button
+    public class Button : Sprite
     {
         /// <summary>
         /// This is the button's state
         /// </summary>
         public enum bState { HOVER, UP, DOWN, RELEASED }
 
-        Point frameSize;
-        Point sheetSize;
-        int fTime;
-        Point currentFrame;
-        Texture2D texture;
-        Vector2 position;
         Label label;
+
         bState buttonState = new bState();
         bool mPress = false;
         bool pMPress = false;
@@ -36,35 +31,15 @@ namespace VoidEngine
         int mY;
 
         /// <summary>
-        /// Creates a button with custom paramiters.
+        /// Creates a button.
         /// </summary>
-        /// <param name="tex">the texture</param>
-        /// <param name="pos">the position for the button</param>
-        /// <param name="frameWidth">the button's width</param>
-        /// <param name="frameHeight">the button's height</param>
-        /// <param name="sheetWidth">the texture's width</param>
-        /// <param name="sheetHeight">the texture's height</param>
-        /// <param name="text">the text in the button</param>
-        public Button(Texture2D tex, Vector2 pos, int frameWidth, int frameHeight, int sheetWidth, int sheetHeight, string text)
+        /// <param name="position">The position for the button.</param>
+        /// <param name="font">The font for the text in the button.</param>
+        /// <param name="text">The text in the button.</param>
+        public Button(Vector2 position, SpriteFont font, string text) : base(position)
         {
-            texture = tex;
-            position = pos;
-            frameSize = new Point(frameWidth, frameHeight);
-            sheetSize = new Point(sheetWidth, sheetHeight);
-            label = new Label(text);
-        }
-
-        /// <summary>
-        /// The button hit test's main function
-        /// </summary>
-        /// <param name="pos">the position</param>
-        /// <param name="frameTex">the frame's size</param>
-        /// <param name="x">the x of the mouse</param>
-        /// <param name="y">the y of the mouse</param>
-        /// <returns>Boolean</returns>
-        Boolean hitButtonAlpha(Vector2 pos, Point frameTex, int x, int y)
-        {
-            return hitButtonAlpha(0, 0, frameTex, Convert.ToInt32(frameTex.X * (x - pos.X) / frameTex.X), Convert.ToInt32(frameTex.Y * (y - pos.Y) / pos.Y));
+            this.position = position;
+            label = new Label(new Vector2(position.X + 2, position.Y + 2), font, text);
         }
 
         /// <summary>
@@ -82,7 +57,7 @@ namespace VoidEngine
             {
                 uint[] data = new uint[Convert.ToUInt32(frameTex.X) * Convert.ToUInt32(frameTex.Y)];
 
-                texture.GetData<uint>(data);
+                currentAnimation.texture.GetData<uint>(data);
 
                 if ((x - (int)tx) + (y - (int)ty) * frameTex.X < frameTex.X * frameTex.Y)
                 {
@@ -112,9 +87,9 @@ namespace VoidEngine
         /// </summary>
         public void updButton()
         {
-            if (hitButtonAlpha(position, frameSize, mX, mY))
+            if (hitButtonAlpha(position.X, position.Y, currentAnimation.frameSize, mX, mY))
             {
-                fTime = 0;
+                currentAnimation.fps = 0;
 
                 if (mPress)
                 {
@@ -138,13 +113,13 @@ namespace VoidEngine
             {
                 buttonState = bState.UP;
 
-                if (fTime > 0)
+                if (currentAnimation.fps > 0)
                 {
-                    fTime = fTime - fTime;
+                    currentAnimation.fps = currentAnimation.fps - currentAnimation.fps;
                 }
                 else
                 {
-                	currentFrame.Y = 0;
+                    currentFrame.Y = 0;
                 }
             }
         }
@@ -153,9 +128,9 @@ namespace VoidEngine
         /// Updates the button with the mouse's cords and state
         /// </summary>
         /// <param name="gameTime">The main GameTime</param>
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
-            fTime = gameTime.ElapsedGameTime.Milliseconds / 1000;
+            currentAnimation.fps = gameTime.ElapsedGameTime.Milliseconds / 1000;
 
             MouseState mState = Mouse.GetState();
 
@@ -165,6 +140,7 @@ namespace VoidEngine
             mPress = mState.LeftButton == ButtonState.Pressed;
 
             updButton();
+            base.Update(gameTime);
         }
 
         /// <summary>
@@ -172,8 +148,9 @@ namespace VoidEngine
         /// </summary>
         /// <param name="gameTime">The main GameTime</param>
         /// <param name="spriteBatch">The main SpriteBatch</param>
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+            spriteBatch.Draw(currentAnimation.texture, position, new Rectangle(currentFrame.X * currentAnimation.frameSize.X, currentFrame.Y * currentAnimation.frameSize.Y, currentAnimation.frameSize.X, currentAnimation.frameSize.Y), Color.White);
         }
     }
+}
