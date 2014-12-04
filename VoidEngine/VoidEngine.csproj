@@ -92,7 +92,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FourAnimation.cs" />
     <Compile Include="OneAnimation.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="TwoAnimation.cs" />
