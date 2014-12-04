@@ -29,8 +29,9 @@ namespace VoidEngine
 
         public AnimationSet currentAnimation;
         public List<AnimationSet> animationSets = new List<AnimationSet>();
+        public Vector2 direction;
 
-        protected Vector2 position;
+        public Vector2 position;
 
         public float speed;
 
