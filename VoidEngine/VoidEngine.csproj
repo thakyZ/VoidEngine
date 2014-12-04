@@ -101,6 +101,7 @@
     <Compile Include="Button.cs" />
     <Compile Include="Label.cs" />
     <Compile Include="Scrollbar.cs" />
+    <Compile Include="Collision.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
