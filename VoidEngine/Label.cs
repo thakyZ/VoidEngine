@@ -31,16 +31,16 @@ namespace VoidEngine
             this.position = position;
         }
 
-        public virtual void Update(GameTime gameTime, string text)
+        public virtual void Update(GameTime gameTime, string text2)
         {
-            this.text = text;
+            text = text2;
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Vector2 FontOrigin = texture.MeasureString(text) / 2;
             // Draw the string
-            spriteBatch.DrawString(texture, text, position, Color.White, 0, FontOrigin, 0.5f, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(texture, text, position, Color.White, 0, new Vector2(0,0), 0.5f, SpriteEffects.None, 0.5f);
         }
     }
 }
