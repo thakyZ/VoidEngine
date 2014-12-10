@@ -141,10 +141,12 @@ namespace VoidEngine
 
         public bool clicked()
         {
-            if (ButtonState.Pressed)
+            if (buttonState == bState.RELEASED)
             {
                 return true;
             }
+
+            return false;
         }
 
         /// <summary>
