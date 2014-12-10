@@ -141,7 +141,10 @@ namespace VoidEngine
 
         public bool clicked()
         {
-            return mPress;
+            if (ButtonState.Pressed)
+            {
+                return true;
+            }
         }
 
         /// <summary>
