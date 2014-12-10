@@ -27,6 +27,10 @@ namespace VoidEngine
             public Point startPos;
         }
 
+        public bool move = false;
+        public bool moveAi = false;
+        public bool playerVsAi = false;
+
         public AnimationSet currentAnimation;
         public List<AnimationSet> animationSets = new List<AnimationSet>();
         public Vector2 direction;

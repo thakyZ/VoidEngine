@@ -24,11 +24,12 @@ namespace VoidEngine
 
         Label label;
 
-        bState buttonState = new bState();
-        bool mPress = false;
+        public bState buttonState = new bState();
+        public bool mPress = false;
         bool pMPress = false;
-        int mX;
-        int mY;
+        public int mX;
+        public int mY;
+        Rectangle testColision;
 
         /// <summary>
         /// Creates a button.
@@ -36,10 +37,9 @@ namespace VoidEngine
         /// <param name="position">The position for the button.</param>
         /// <param name="font">The font for the text in the button.</param>
         /// <param name="text">The text in the button.</param>
-        public Button(Vector2 position, SpriteFont font, string text) : base(position)
+        public Button(Vector2 position, SpriteFont font, float scale, string text) : base(position)
         {
-            this.position = position;
-            label = new Label(new Vector2(position.X + 2, position.Y + 2), font, text);
+            label = new Label(new Vector2(position.X + 2, position.Y + 2), font, scale, text);
         }
 
         /// <summary>
@@ -53,16 +53,11 @@ namespace VoidEngine
         /// <returns>Boolean</returns>
         Boolean hitButtonAlpha(float tx, float ty, Point frameTex, int x, int y)
         {
-            if (hitButton(tx, ty, frameTex, x, y))
+            testColision = new Rectangle((int)tx, (int)ty, frameTex.X, frameTex.Y);
+
+            if (testColision.Intersects(new Rectangle(x, y, 1, 1)))
             {
-                uint[] data = new uint[Convert.ToUInt32(frameTex.X) * Convert.ToUInt32(frameTex.Y)];
-
-                currentAnimation.texture.GetData<uint>(data);
-
-                if ((x - (int)tx) + (y - (int)ty) * frameTex.X < frameTex.X * frameTex.Y)
-                {
-                    return ((data[(Convert.ToUInt32(x) - (int)tx) + (Convert.ToUInt32(y) - (int)ty) * Convert.ToUInt32(frameTex.X)] & 0xFF000000) >> 24) > 20;
-                }
+                return true;
             }
 
             return false;
@@ -94,24 +89,26 @@ namespace VoidEngine
                 if (mPress)
                 {
                     buttonState = bState.DOWN;
-                    currentFrame.X = 1;
+                    SetAnimation("PRESSED");
                 }
                 else if (!mPress && pMPress)
                 {
                     if (buttonState == bState.DOWN)
                     {
                         buttonState = bState.RELEASED;
+                        SetAnimation("REG");
                     }
                 }
                 else
                 {
                     buttonState = bState.HOVER;
-                    currentFrame.X = 2;
+                    SetAnimation("HOVER");
                 }
             }
             else
             {
                 buttonState = bState.UP;
+                SetAnimation("REG");
 
                 if (currentAnimation.fps > 0)
                 {
@@ -119,7 +116,6 @@ namespace VoidEngine
                 }
                 else
                 {
-                    currentFrame.Y = 0;
                 }
             }
         }
@@ -143,6 +139,11 @@ namespace VoidEngine
             base.Update(gameTime);
         }
 
+        public bool clicked()
+        {
+            return mPress;
+        }
+
         /// <summary>
         /// Draws the button
         /// </summary>
@@ -150,7 +151,18 @@ namespace VoidEngine
         /// <param name="spriteBatch">The main SpriteBatch</param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(currentAnimation.texture, position, new Rectangle(currentFrame.X * currentAnimation.frameSize.X, currentFrame.Y * currentAnimation.frameSize.Y, currentAnimation.frameSize.X, currentAnimation.frameSize.Y), Color.White);
+            base.Draw(gameTime, spriteBatch);
+
+            label.Draw(gameTime, spriteBatch);
+        }
+
+        public override void AddAnimations(Texture2D texture)
+        {
+            Addanimation("REG", texture, new Point(85, 23), new Point(0, 0), new Point(0, 0), 1000);
+            Addanimation("HOVER", texture, new Point(85, 23), new Point(1, 0), new Point(85, 0), 1000);
+            Addanimation("PRESSED", texture, new Point(85, 23), new Point(2, 0), new Point(170, 0), 1000);
+            SetAnimation("REG");
+            base.AddAnimations(texture);
         }
     }
 }

@@ -17,8 +17,6 @@ namespace VoidEngine
     /// </summary>
     public class OneAnimation : Sprite
     {
-        protected bool move;
-        protected int speed;
         protected Keys up;
         protected Keys down;
         protected Keys left;
