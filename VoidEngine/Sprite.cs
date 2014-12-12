@@ -60,6 +60,12 @@ namespace VoidEngine
             lFTime = 0;
         }
 
+        public Sprite(Vector2 position, Effect effect)
+        {
+            this.position = position;
+            lFTime = 0;
+        }
+
         /// <summary>
         /// Put this in the Update function
         /// </summary>
