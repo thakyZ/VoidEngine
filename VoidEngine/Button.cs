@@ -64,20 +64,6 @@ namespace VoidEngine
         }
 
         /// <summary>
-        /// The hit test for a button for hitTestAlpha overload 1.
-        /// </summary>
-        /// <param name="tx">The texture's x</param>
-        /// <param name="ty">The texture's y</param>
-        /// <param name="frameTex">The texture's with and height in Point form</param>
-        /// <param name="x">The mouse's x</param>
-        /// <param name="y">The mouse's y</param>
-        /// <returns>Boolean</returns>
-        Boolean hitButton(float tx, float ty, Point frameTex, int x, int y)
-        {
-            return (x >= tx && x <= tx + frameTex.X && y >= ty && y <= ty + frameTex.X);
-        }
-
-        /// <summary>
         /// Updates the button without the mouse, exectutes the hitButtonAlpha function too.
         /// </summary>
         public void updButton()
@@ -139,7 +125,7 @@ namespace VoidEngine
             base.Update(gameTime);
         }
 
-        public bool clicked()
+        public bool Clicked()
         {
             if (buttonState == bState.RELEASED)
             {
