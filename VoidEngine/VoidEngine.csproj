@@ -92,6 +92,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BloomComponent.cs" />
+    <Compile Include="BloomSettings.cs" />
+    <Compile Include="Effect2.cs" />
+    <Compile Include="GUI.cs" />
     <Compile Include="OneAnimation.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="TwoAnimation.cs" />
