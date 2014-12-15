@@ -15,7 +15,7 @@ namespace VoidEngine
     /// <summary>
     ///
     /// </summary>
-    class Effect
+    public class VoidEffect
     {
         BloomComponent bloom = null;
         Microsoft.Xna.Framework.Game myGame;
@@ -23,15 +23,18 @@ namespace VoidEngine
         /// <summary>
         /// This is for creating bloom effect.
         /// </summary>
-        public Effect(Microsoft.Xna.Framework.Game myGame)
+        public VoidEffect(Microsoft.Xna.Framework.Game myGame)
         {
-            bloom = new BloomComponent(this);
+            bloom = new BloomComponent(myGame);
             this.myGame = myGame;
-            Components.Add(bloom);
-            bloom.Settings = new BloomSettings(null, 0.25f, 4, 2, 1, 1.5f, 1)
+            myGame.Components.Add(bloom);
+            bloom.Settings = new BloomSettings(null, 0.25f, 4, 2, 1, 1.5f, 1);
         }
 
-        public virtual void Update(GameTime gameTime);
+        public virtual void Update(GameTime gameTime)
+        {
+            bloom.Update(gameTime);
+        }
 
         public virtual void Draw(GameTime gameTime)
         {
@@ -40,7 +43,5 @@ namespace VoidEngine
                 bloom.BeginDraw();
             }
         }
-
-
     }
 }

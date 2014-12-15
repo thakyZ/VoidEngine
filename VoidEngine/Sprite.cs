@@ -95,10 +95,6 @@ namespace VoidEngine
             }
         }
 
-        public virtual void Update(GameTime gameTime, Vector2 a, Vector2 b, Vector2 c, Vector2 d)
-        {
-        }
-
         /// <summary>
         /// Put inbetween the spriteBatch.Begin and spriteBatch.End
         /// </summary>
@@ -137,7 +133,9 @@ namespace VoidEngine
         }
 
         public virtual void AddAnimations(Texture2D texture)
-        { }
+        {
+
+        }
 
         public Rectangle collisionRect()
         {

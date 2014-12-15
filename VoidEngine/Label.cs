@@ -21,16 +21,18 @@ namespace VoidEngine
         protected SpriteFont texture;
         protected Vector2 position;
         protected float scale;
+        protected Color color;
         /// <summary>
         /// Creates the Label.
         /// </summary>
         /// <param name="text">The text that will be in the label.</param>
-        public Label(Vector2 position, SpriteFont texture, float scale, string text)
+        public Label(Vector2 position, SpriteFont texture, float scale, Color color, string text)
         {
             this.text = text;
             this.texture = texture;
             this.position = position;
             this.scale = scale;
+            this.color = color;
         }
 
         public virtual void Update(GameTime gameTime, string text2)
@@ -42,7 +44,7 @@ namespace VoidEngine
         {
             Vector2 FontOrigin = texture.MeasureString(text) / 2;
             // Draw the string
-            spriteBatch.DrawString(texture, text, position, Color.White, 0, new Vector2(0,0), scale, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(texture, text, position, color, 0, new Vector2(0,0), scale, SpriteEffects.None, 0.5f);
         }
     }
 }

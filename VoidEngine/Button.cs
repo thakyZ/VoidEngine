@@ -37,9 +37,9 @@ namespace VoidEngine
         /// <param name="position">The position for the button.</param>
         /// <param name="font">The font for the text in the button.</param>
         /// <param name="text">The text in the button.</param>
-        public Button(Vector2 position, SpriteFont font, float scale, string text) : base(position)
+        public Button(Vector2 position, SpriteFont font, float scale, Color fontColor, string text) : base(position)
         {
-            label = new Label(new Vector2(position.X + 2, position.Y + 2), font, scale, text);
+            label = new Label(new Vector2(position.X + 2, position.Y + 2), font, scale, fontColor, text);
         }
 
         /// <summary>

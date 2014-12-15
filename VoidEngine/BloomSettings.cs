@@ -35,9 +35,7 @@ namespace VoidEngine
         /// <summary>
         /// Constructs a new bloom settings descriptor.
         /// </summary>
-        public BloomSettings(string name, float bloomThreshold, float blurAmount,
-                             float bloomIntensity, float baseIntensity,
-                             float bloomSaturation, float baseSaturation)
+        public BloomSettings(string name, float bloomThreshold, float blurAmount, float bloomIntensity, float baseIntensity, float bloomSaturation, float baseSaturation)
         {
             Name = name;
             BloomThreshold = bloomThreshold;

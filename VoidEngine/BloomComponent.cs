@@ -13,6 +13,8 @@ namespace VoidEngine
         Effect bloomCombineEffect;
         Effect gaussianBlurEffect;
 
+        Game myGame;
+
         RenderTarget2D sceneRenderTarget;
         RenderTarget2D renderTarget1;
         RenderTarget2D renderTarget2;
@@ -21,8 +23,14 @@ namespace VoidEngine
         // Choose what display settings the bloom should use.
         public BloomSettings Settings
         {
-            get { return settings; }
-            set { settings = value; }
+            get
+            {
+                return settings;
+            }
+            set
+            {
+                settings = value;
+            }
         }
 
         BloomSettings settings = BloomSettings.PresetSettings[0];
@@ -41,17 +49,26 @@ namespace VoidEngine
 
         public IntermediateBuffer ShowBuffer
         {
-            get { return showBuffer; }
-            set { showBuffer = value; }
+            get
+            {
+                return showBuffer;
+            }
+            set
+            {
+                showBuffer = value;
+            }
         }
 
         IntermediateBuffer showBuffer = IntermediateBuffer.FinalResult;
 
-        public BloomComponent(Game game)
-            : base(game)
+        public BloomComponent(Game game) : base(game)
         {
             if (game == null)
                 throw new ArgumentNullException("game");
+            else
+            {
+                this.myGame = game;
+            }
         }
 
 
@@ -60,14 +77,14 @@ namespace VoidEngine
         /// </summary>
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(myGame.GraphicsDevice);
 
             bloomExtractEffect = Game.Content.Load<Effect>("BloomExtract");
             bloomCombineEffect = Game.Content.Load<Effect>("BloomCombine");
             gaussianBlurEffect = Game.Content.Load<Effect>("GaussianBlur");
 
             // Look up the resolution and format of our main backbuffer.
-            PresentationParameters pp = GraphicsDevice.PresentationParameters;
+            PresentationParameters pp = myGame.GraphicsDevice.PresentationParameters;
 
             int width = pp.BackBufferWidth;
             int height = pp.BackBufferHeight;
@@ -75,7 +92,7 @@ namespace VoidEngine
             SurfaceFormat format = pp.BackBufferFormat;
 
             // Create a texture for rendering the main scene, prior to applying bloom.
-            sceneRenderTarget = new RenderTarget2D(GraphicsDevice, width, height, false,
+            sceneRenderTarget = new RenderTarget2D(myGame.GraphicsDevice, width, height, false,
                                                    format, pp.DepthStencilFormat, pp.MultiSampleCount,
                                                    RenderTargetUsage.DiscardContents);
 
@@ -86,8 +103,8 @@ namespace VoidEngine
             width /= 2;
             height /= 2;
 
-            renderTarget1 = new RenderTarget2D(GraphicsDevice, width, height, false, format, DepthFormat.None);
-            renderTarget2 = new RenderTarget2D(GraphicsDevice, width, height, false, format, DepthFormat.None);
+            renderTarget1 = new RenderTarget2D(myGame.GraphicsDevice, width, height, false, format, DepthFormat.None);
+            renderTarget2 = new RenderTarget2D(myGame.GraphicsDevice, width, height, false, format, DepthFormat.None);
         }
 
 
@@ -110,7 +127,7 @@ namespace VoidEngine
         {
             if (Visible)
             {
-                GraphicsDevice.SetRenderTarget(sceneRenderTarget);
+                myGame.GraphicsDevice.SetRenderTarget(sceneRenderTarget);
             }
         }
 
@@ -121,37 +138,30 @@ namespace VoidEngine
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
+            myGame.GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 
             // Pass 1: draw the scene into rendertarget 1, using a
             // shader that extracts only the brightest parts of the image.
-            bloomExtractEffect.Parameters["BloomThreshold"].SetValue(
-                Settings.BloomThreshold);
+            bloomExtractEffect.Parameters["BloomThreshold"].SetValue(Settings.BloomThreshold);
 
-            DrawFullscreenQuad(sceneRenderTarget, renderTarget1,
-                               bloomExtractEffect,
-                               IntermediateBuffer.PreBloom);
+            DrawFullscreenQuad(sceneRenderTarget, renderTarget1, bloomExtractEffect, IntermediateBuffer.PreBloom);
 
             // Pass 2: draw from rendertarget 1 into rendertarget 2,
             // using a shader to apply a horizontal gaussian blur filter.
             SetBlurEffectParameters(1.0f / (float)renderTarget1.Width, 0);
 
-            DrawFullscreenQuad(renderTarget1, renderTarget2,
-                               gaussianBlurEffect,
-                               IntermediateBuffer.BlurredHorizontally);
+            DrawFullscreenQuad(renderTarget1, renderTarget2, gaussianBlurEffect, IntermediateBuffer.BlurredHorizontally);
 
             // Pass 3: draw from rendertarget 2 back into rendertarget 1,
             // using a shader to apply a vertical gaussian blur filter.
             SetBlurEffectParameters(0, 1.0f / (float)renderTarget1.Height);
 
-            DrawFullscreenQuad(renderTarget2, renderTarget1,
-                               gaussianBlurEffect,
-                               IntermediateBuffer.BlurredBothWays);
+            DrawFullscreenQuad(renderTarget2, renderTarget1, gaussianBlurEffect, IntermediateBuffer.BlurredBothWays);
 
             // Pass 4: draw both rendertarget 1 and the original scene
             // image back into the main backbuffer, using a shader that
             // combines them to produce the final bloomed result.
-            GraphicsDevice.SetRenderTarget(null);
+            myGame.GraphicsDevice.SetRenderTarget(null);
 
             EffectParameterCollection parameters = bloomCombineEffect.Parameters;
 
@@ -160,14 +170,11 @@ namespace VoidEngine
             parameters["BloomSaturation"].SetValue(Settings.BloomSaturation);
             parameters["BaseSaturation"].SetValue(Settings.BaseSaturation);
 
-            GraphicsDevice.Textures[1] = sceneRenderTarget;
+            myGame.GraphicsDevice.Textures[1] = sceneRenderTarget;
 
-            Viewport viewport = GraphicsDevice.Viewport;
+            Viewport viewport = myGame.GraphicsDevice.Viewport;
 
-            DrawFullscreenQuad(renderTarget1,
-                               viewport.Width, viewport.Height,
-                               bloomCombineEffect,
-                               IntermediateBuffer.FinalResult);
+            DrawFullscreenQuad(renderTarget1, viewport.Width, viewport.Height, bloomCombineEffect, IntermediateBuffer.FinalResult);
         }
 
 
@@ -175,14 +182,11 @@ namespace VoidEngine
         /// Helper for drawing a texture into a rendertarget, using
         /// a custom shader to apply postprocessing effects.
         /// </summary>
-        void DrawFullscreenQuad(Texture2D texture, RenderTarget2D renderTarget,
-                                Effect effect, IntermediateBuffer currentBuffer)
+        void DrawFullscreenQuad(Texture2D texture, RenderTarget2D renderTarget, Effect effect, IntermediateBuffer currentBuffer)
         {
-            GraphicsDevice.SetRenderTarget(renderTarget);
+            myGame.GraphicsDevice.SetRenderTarget(renderTarget);
 
-            DrawFullscreenQuad(texture,
-                               renderTarget.Width, renderTarget.Height,
-                               effect, currentBuffer);
+            DrawFullscreenQuad(texture, renderTarget.Width, renderTarget.Height, effect, currentBuffer);
         }
 
 
@@ -190,8 +194,7 @@ namespace VoidEngine
         /// Helper for drawing a texture into the current rendertarget,
         /// using a custom shader to apply postprocessing effects.
         /// </summary>
-        void DrawFullscreenQuad(Texture2D texture, int width, int height,
-                                Effect effect, IntermediateBuffer currentBuffer)
+        void DrawFullscreenQuad(Texture2D texture, int width, int height, Effect effect, IntermediateBuffer currentBuffer)
         {
             // If the user has selected one of the show intermediate buffer options,
             // we still draw the quad to make sure the image will end up on the screen,
@@ -282,8 +285,7 @@ namespace VoidEngine
         {
             float theta = Settings.BlurAmount;
 
-            return (float)((1.0 / Math.Sqrt(2 * Math.PI * theta)) *
-                           Math.Exp(-(n * n) / (2 * theta * theta)));
+            return (float)((1.0 / Math.Sqrt(2 * Math.PI * theta)) * Math.Exp(-(n * n) / (2 * theta * theta)));
         }
     }
 }

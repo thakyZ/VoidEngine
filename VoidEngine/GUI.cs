@@ -15,18 +15,18 @@ namespace VoidEngine
     /// <summary>
     ///
     /// </summary>
-    class GUI
+    public class GUI
     {
         public List<Rectangle> guiWindows;
         public List<Color> guiWindowsColor;
         public List<Texture2D> guiWindowsTexture;
-        public List<Buttons> guiButtons;
+        public List<Button> guiButtons;
         public Color shadedColor;
         public Vector2 position;
         public bool active = false;
 
 
-        public GUI(Vector2 position, List<Rectangle> guiWindows, List<Texture2D> guiWindowsTexture, List<Color> guiWindowsColor, List<Buttons> guiButtons, bool active)
+        public GUI(Vector2 position, List<Rectangle> guiWindows, List<Texture2D> guiWindowsTexture, List<Color> guiWindowsColor, List<Button> guiButtons, bool active)
         {
             this.guiWindows = guiWindows;
             this.guiWindowsColor = guiWindowsColor;
@@ -36,7 +36,7 @@ namespace VoidEngine
             this.active = active;
         }
 
-        public GUI(Vector2 position, List<Rectangle> guiWindows, List<Texture2D> guiWindowsTexture, List<Color> guiWindowsColor, List<Buttons> guiButtons, bool active, Color shadedColor)
+        public GUI(Vector2 position, List<Rectangle> guiWindows, List<Texture2D> guiWindowsTexture, List<Color> guiWindowsColor, List<Button> guiButtons, bool active, Color shadedColor)
         {
             this.guiWindows = guiWindows;
             this.guiWindowsColor = guiWindowsColor;
@@ -55,7 +55,7 @@ namespace VoidEngine
             }
         }
 
-        public void Clicked(int buttonIndex)
+        public bool Clicked(int buttonIndex)
         {
             if (guiButtons[buttonIndex].Clicked())
             {
@@ -69,7 +69,7 @@ namespace VoidEngine
         {
             if (active)
             {
-                foreach (Rectangle r in guiWindows())
+                foreach (Rectangle r in guiWindows)
                 {
                     foreach (Texture2D t in guiWindowsTexture)
                     {
@@ -77,9 +77,9 @@ namespace VoidEngine
                         {
                             foreach (Button b in guiButtons)
                             {
-                                spriteBatch.Draw(t, new Rectange(0, 0, position.X, position.Y), r, c);
+                                spriteBatch.Draw(t, new Rectangle(0, 0, (int)position.X, (int)position.Y), r, c);
 
-                                b.Draw();
+                                b.Draw(gameTime, spriteBatch);
                             }
                         }
                     }
