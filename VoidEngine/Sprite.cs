@@ -17,6 +17,10 @@ namespace VoidEngine
     /// </summary>
     public class Sprite
     {
+        public enum AIType { NONE, ENEMY, AI, PLAYER };
+
+        public enum MovementType { NONE, HORIZONTAL, VERTICAL, TOPDOWN, PLATFORMER };
+
         public struct AnimationSet
         {
             public string name;
@@ -28,8 +32,8 @@ namespace VoidEngine
         }
 
         public bool move = false;
-        public bool moveAi = false;
-        public bool playerVsAi = false;
+        public AIType aiType;
+        public MovementType movementType;
 
         public AnimationSet currentAnimation;
         public List<AnimationSet> animationSets = new List<AnimationSet>();
@@ -43,6 +47,8 @@ namespace VoidEngine
         protected int lFTime;
 
         protected KeyboardState keyboardState, pKeyboardState;
+
+        public List<Keys> MovementKeys = new List<Keys>();
 
         /// <summary>
         /// Creates the sprite with custom properties
@@ -105,7 +111,7 @@ namespace VoidEngine
             spriteBatch.Draw(currentAnimation.texture, this.position, new Rectangle(currentAnimation.startPos.X + (currentFrame.X * currentAnimation.frameSize.X), currentAnimation.startPos.Y + (currentFrame.Y * currentAnimation.frameSize.Y), currentAnimation.frameSize.X, currentAnimation.frameSize.Y), Color.White);
         }
 
-        public void Addanimation(string name, Texture2D tex, Point frameSize, Point sheetsize, Point startPos, int millisecondsPerFrame)
+        public void addAnimation(string name, Texture2D tex, Point frameSize, Point sheetsize, Point startPos, int millisecondsPerFrame)
         {
             AnimationSet tmpAni;
             tmpAni.name = name;

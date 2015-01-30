@@ -149,9 +149,9 @@ namespace VoidEngine
 
         public override void AddAnimations(Texture2D texture)
         {
-            Addanimation("REG", texture, new Point(85, 23), new Point(0, 0), new Point(0, 0), 1000);
-            Addanimation("HOVER", texture, new Point(85, 23), new Point(1, 0), new Point(85, 0), 1000);
-            Addanimation("PRESSED", texture, new Point(85, 23), new Point(2, 0), new Point(170, 0), 1000);
+            addAnimation("REG", texture, new Point(85, 23), new Point(0, 0), new Point(0, 0), 1000);
+            addAnimation("HOVER", texture, new Point(85, 23), new Point(1, 0), new Point(85, 0), 1000);
+            addAnimation("PRESSED", texture, new Point(85, 23), new Point(2, 0), new Point(170, 0), 1000);
             SetAnimation("REG");
             base.AddAnimations(texture);
         }
