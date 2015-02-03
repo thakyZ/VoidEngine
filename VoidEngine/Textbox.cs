@@ -13,21 +13,23 @@ using Microsoft.Xna.Framework.Media;
 namespace VoidEngine
 {
     /// <summary>
-    /// The Textbox class for VoidEngine
+    /// The Scrollbar class for VoidEngine
     /// </summary>
-    public class Textbox
+    public class Textbox : Sprite
     {
+        Game myGame;
+
         /// <summary>
-        /// Creates the Textbox
+        /// Creates the Scrollbar
         /// </summary>
-        /// <param name="tex">The texture</param>
-        /// <param name="pos">The position</param>
-        /// <param name="width">The width</param>
-        /// <param name="height">The height</param>
-        /// <param name="lines">The lines</param>
-        /// <param name="text">The default text</param>
-        public Textbox(Texture2D tex, Vector2 pos, int width, int height, int lines, string text)
+        /// <param name="position">The position of the sprite</param>
+        /// <param name="animationSetList">The list of animation sets</param>
+        /// <param name="myGame">The class of the game that this is created in</param>
+        public Textbox(Vector2 position, List<AnimationSet> animationSetList, Game myGame) : base(position, animationSetList)
         {
+            this.myGame = myGame;
+            animationSets = animationSetList;
+            this.position = position;
         }
     }
 }

@@ -17,59 +17,121 @@ namespace VoidEngine
     /// </summary>
     public class Sprite
     {
+        // <summary>
+        // The type of AI the sprite or enemy or player will have
+        // Only PLAYER and NONE are implemented
+        // </summary>
         public enum AIType { NONE, ENEMY, AI, PLAYER };
 
+        // <summary>
+        // The type of movement that the player or AI or sprite will have
+        // </summary>
         public enum MovementType { NONE, HORIZONTAL, VERTICAL, TOPDOWN, PLATFORMER };
 
+        // <summary>
+        // The animation set for each type of animation in the player sprite sheet.
+        // </summary>
         public struct AnimationSet
         {
+            // <summary>
+            // The name "In all caps" that is used in the animation
+            // </summary>
             public string name;
+            // <summary>
+            // The texture of the sprite sheet
+            // </summary>
             public Texture2D texture;
+            // <summary>
+            // The size of each frame, all frames have to be the same size in one animation.
+            // </summary>
             public Point frameSize;
+            // <summary>
+            // The size of that animation in the sheet in frames.
+            // </summary>
             public Point sheetSize;
-            public int fps;
-            public Point startPos;
+            // <summary>
+            // The rate in milliseconds that the frames change
+            // </summary>
+            public int framesPerMillisecond;
+            // <summary>
+            // The start position in exact cordinates that the animation starts at.
+            // </summary>
+            public Point startPosition;
+
+            // <summary>
+            // For creating a new animation set.
+            // </summary>
+            // <param name="name2">The name "In all caps" that is used in the animation</param>
+            // <param name="texture2">The texture of the sprite sheet</param>
+            // <param name="frameSize2">The size of each frame, all frames have to be the same size in one animation.</param>
+            // <param name="sheetSize2">The size of that animation in the sheet in frames.</param>
+            // <param name="startPosition2">The rate in milliseconds that the frames change</param>
+            // <param name="framesPerMillisecond2">The start position in exact cordinates that the animation starts at.</param>
+            public AnimationSet(string name2, Texture2D texture2, Point frameSize2, Point sheetSize2, Point startPosition2, int framesPerMillisecond2)
+            {
+                name = name2;
+                texture = texture2;
+                frameSize = frameSize2;
+                sheetSize = sheetSize2;
+                framesPerMillisecond = framesPerMillisecond2;
+                startPosition = startPosition2;
+            }
         }
 
-        public bool move = false;
-        public AIType aiType;
-        public MovementType movementType;
-
+        // <summary>
+        // The current AnimationSet.
+        // </summary>
         public AnimationSet currentAnimation;
-        public List<AnimationSet> animationSets = new List<AnimationSet>();
+        List<AnimationSet> animationSets = new List<AnimationSet>(); // The list of animation sets.
+        Point currentFrame; // The current frame's position in sheet cords.
+        int lastFrameTime; // frame time before the update.
+
+        /// <summary>
+        /// The current direction that the sprite is moving at.
+        /// </summary>
         public Vector2 direction;
-
+        /// <summary>
+        /// The current direction that the sprite is at.
+        /// </summary>
         public Vector2 position;
-
+        /// <summary>
+        /// The current speed that the sprite is moving at.
+        /// <summary>
         public float speed;
-
-        protected Point currentFrame;
-        protected int lFTime;
-
-        protected KeyboardState keyboardState, pKeyboardState;
-
+        /// <summary>
+        /// Weither the sprite can move or not.
+        /// </summary>
+        public bool canMove = false;
+        /// <summary>
+        /// The type of AI the sprite has.
+        /// </summary>
+        public AIType aiType;
+        /// <summary>
+        /// The type of movement the sprite has.
+        /// </summary>
+        public MovementType movementType;
+        /// <summary>
+        /// The list of keys that the sprite can move at.
+        /// indexes: [0]: Left | [1]: Up | [2]: Right | [3]: Down | [4]: Custom1 | [5]: Custom2 | [6]: Custom3
+        /// </summary>
         public List<Keys> MovementKeys = new List<Keys>();
+
+        /// <summary>
+        /// The keyboard detection
+        /// </summary>
+        protected KeyboardState keyboardState, previousKeyboardState;
+
 
         /// <summary>
         /// Creates the sprite with custom properties
         /// </summary>
-        /// <param name="tex">The texture</param>
-        /// <param name="pos">the position</param>
-        /// <param name="frameWidth">the width of each frame</param>
-        /// <param name="frameHeight">the height of each frame</param>
-        /// <param name="sheetWidth">the amount of frames, widthwise</param>
-        /// <param name="sheetHeight">the ammount of frames, height wise</param>
-        /// <param name="fps">the frames per milliseconds</param>
-        public Sprite(Vector2 position)
+        /// <param name="postion">The position of the sprite.</param>
+        /// <param name="animationSetList">The list of animations.</param>
+        public Sprite(Vector2 position, List<AnimationSet> animationSetList)
         {
+            animationSets = animationSetList;
             this.position = position;
-            lFTime = 0;
-        }
-
-        public Sprite(Vector2 position, Effect effect)
-        {
-            this.position = position;
-            lFTime = 0;
+            lastFrameTime = 0;
         }
 
         /// <summary>
@@ -79,10 +141,11 @@ namespace VoidEngine
         public virtual void Update(GameTime gameTime)
         {
             keyboardState = Keyboard.GetState();
+            previousKeyboardState = keyboardState;
 
-            lFTime += gameTime.ElapsedGameTime.Milliseconds;
+            lastFrameFTime += gameTime.ElapsedGameTime.Milliseconds;
 
-            if (lFTime >= currentAnimation.fps)
+            if (lastFrameTime >= currentAnimation.framesPerMillisecond)
             {
                 currentFrame.X++;
 
@@ -97,7 +160,7 @@ namespace VoidEngine
                     }
                 }
 
-                lFTime = 0;
+                lastFrameTime = 0;
             }
         }
 
@@ -108,21 +171,13 @@ namespace VoidEngine
         /// <param name="spriteBatch">The main SpriteBatch</param>
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(currentAnimation.texture, this.position, new Rectangle(currentAnimation.startPos.X + (currentFrame.X * currentAnimation.frameSize.X), currentAnimation.startPos.Y + (currentFrame.Y * currentAnimation.frameSize.Y), currentAnimation.frameSize.X, currentAnimation.frameSize.Y), Color.White);
+            spriteBatch.Draw(currentAnimation.texture, this.position, new Rectangle(currentAnimation.startPosition.X + (currentFrame.X * currentAnimation.frameSize.X), currentAnimation.startPosition.Y + (currentFrame.Y * currentAnimation.frameSize.Y), currentAnimation.frameSize.X, currentAnimation.frameSize.Y), Color.White);
         }
 
-        public void addAnimation(string name, Texture2D tex, Point frameSize, Point sheetsize, Point startPos, int millisecondsPerFrame)
-        {
-            AnimationSet tmpAni;
-            tmpAni.name = name;
-            tmpAni.texture = tex;
-            tmpAni.frameSize = frameSize;
-            tmpAni.sheetSize = sheetsize;
-            tmpAni.startPos = startPos;
-            tmpAni.fps = millisecondsPerFrame;
-            animationSets.Add(tmpAni);
-        }
-
+        /// <summary>
+        /// Set the currentAnimation.
+        /// </summary>
+        /// <param name="setName">The name of the animation to set.</param>
         public void SetAnimation(string setName)
         {
             if (currentAnimation.name != setName)
@@ -138,12 +193,10 @@ namespace VoidEngine
             }
         }
 
-        public virtual void AddAnimations(Texture2D texture)
-        {
-
-        }
-
-        public Rectangle collisionRect()
+        /// <summary>
+        /// The check if the sprite collides rectangulary.
+        /// </summary>
+        public Rectangle collisionRectangle()
         {
             return new Rectangle((int)position.X, (int)position.Y, currentAnimation.frameSize.X, currentAnimation.frameSize.Y);
         }

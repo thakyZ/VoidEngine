@@ -18,18 +18,18 @@ namespace VoidEngine
     public class Button : Sprite
     {
         /// <summary>
-        /// This is the button's state
+        /// This is the Void Engine button's state enum
         /// </summary>
         public enum bState { HOVER, UP, DOWN, RELEASED }
 
-        Label label;
+        Label label; // This is the label that the button has overlayed on it.
 
-        public bState buttonState = new bState();
-        public bool mPress = false;
-        bool pMPress = false;
-        public int mX;
-        public int mY;
-        Rectangle testColision;
+        bState buttonState = new bState(); // This is the button state variable
+        bool mousePress = false; // This
+        bool previousMousePress = false;
+        int mouseX;
+        int mouseY;
+        Rectangle testCollision;
 
         /// <summary>
         /// Creates a button.
@@ -37,9 +37,10 @@ namespace VoidEngine
         /// <param name="position">The position for the button.</param>
         /// <param name="font">The font for the text in the button.</param>
         /// <param name="text">The text in the button.</param>
-        public Button(Vector2 position, SpriteFont font, float scale, Color fontColor, string text) : base(position)
+        public Button(Vector2 position, SpriteFont font, float scale, Color fontColor, string text, List<Sprite.AnimationSet> animationSetList) : base(position)
         {
-            label = new Label(new Vector2(position.X + 2, position.Y + 2), font, scale, fontColor, text);
+            animationSets = animationSetList;
+            label = new Label(new Vector2(position.X + ((animationSetList[0].frameSize.X - font.MeasureString(text).X) / 2), position.Y + ((aniationSetList[0].frameSize.Y - font.MeasureString(text).Y) / 2)), font, scale, fontColor, text);
         }
 
         /// <summary>
@@ -51,11 +52,11 @@ namespace VoidEngine
         /// <param name="x">the x of mouse</param>
         /// <param name="y">the y of mouse</param>
         /// <returns>Boolean</returns>
-        Boolean hitButtonAlpha(float tx, float ty, Point frameTex, int x, int y)
+        Boolean hitButtonAlpha(float textureX, float textureY, Point frameSize, int x, int y)
         {
-            testColision = new Rectangle((int)tx, (int)ty, frameTex.X, frameTex.Y);
+            testCollision = new Rectangle((int)textureX, (int)textureY, frameSize.X, frameSize.Y);
 
-            if (testColision.Intersects(new Rectangle(x, y, 1, 1)))
+            if (testCollision.Intersects(new Rectangle(x, y, 1, 1)))
             {
                 return true;
             }
@@ -68,16 +69,16 @@ namespace VoidEngine
         /// </summary>
         public void updButton()
         {
-            if (hitButtonAlpha(position.X, position.Y, currentAnimation.frameSize, mX, mY))
+            if (hitButtonAlpha(position.X, position.Y, currentAnimation.frameSize, mouseX, mouseY))
             {
                 currentAnimation.fps = 0;
 
-                if (mPress)
+                if (mousePress)
                 {
                     buttonState = bState.DOWN;
                     SetAnimation("PRESSED");
                 }
-                else if (!mPress && pMPress)
+                else if (!mousePress && previousMousePress)
                 {
                     if (buttonState == bState.DOWN)
                     {
@@ -98,10 +99,7 @@ namespace VoidEngine
 
                 if (currentAnimation.fps > 0)
                 {
-                    currentAnimation.fps = currentAnimation.fps - currentAnimation.fps;
-                }
-                else
-                {
+                    currentAnimation.fps -= currentAnimation.fps;
                 }
             }
         }
@@ -122,9 +120,11 @@ namespace VoidEngine
             mPress = mState.LeftButton == ButtonState.Pressed;
 
             updButton();
-            base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Returns true if the button was clicked
+        /// </summary>
         public bool Clicked()
         {
             if (buttonState == bState.RELEASED)
@@ -145,15 +145,6 @@ namespace VoidEngine
             base.Draw(gameTime, spriteBatch);
 
             label.Draw(gameTime, spriteBatch);
-        }
-
-        public override void AddAnimations(Texture2D texture)
-        {
-            addAnimation("REG", texture, new Point(85, 23), new Point(0, 0), new Point(0, 0), 1000);
-            addAnimation("HOVER", texture, new Point(85, 23), new Point(1, 0), new Point(85, 0), 1000);
-            addAnimation("PRESSED", texture, new Point(85, 23), new Point(2, 0), new Point(170, 0), 1000);
-            SetAnimation("REG");
-            base.AddAnimations(texture);
         }
     }
 }
