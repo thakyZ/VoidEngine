@@ -37,10 +37,10 @@ namespace VoidEngine
         /// <param name="position">The position for the button.</param>
         /// <param name="font">The font for the text in the button.</param>
         /// <param name="text">The text in the button.</param>
-        public Button(Vector2 position, SpriteFont font, float scale, Color fontColor, string text, List<Sprite.AnimationSet> animationSetList) : base(position)
+        public Button(Vector2 position, SpriteFont font, float scale, Color fontColor, string text, List<Sprite.AnimationSet> animationSetList) : base(position, animationSetList)
         {
             animationSets = animationSetList;
-            label = new Label(new Vector2(position.X + ((animationSetList[0].frameSize.X - font.MeasureString(text).X) / 2), position.Y + ((aniationSetList[0].frameSize.Y - font.MeasureString(text).Y) / 2)), font, scale, fontColor, text);
+            label = new Label(new Vector2(position.X + ((animationSetList[0].frameSize.X - font.MeasureString(text).X) / 2), position.Y + ((animationSetList[0].frameSize.Y - font.MeasureString(text).Y) / 2)), font, scale, fontColor, text);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace VoidEngine
         {
             if (hitButtonAlpha(position.X, position.Y, currentAnimation.frameSize, mouseX, mouseY))
             {
-                currentAnimation.fps = 0;
+                currentAnimation.framesPerMillisecond = 0;
 
                 if (mousePress)
                 {
@@ -97,9 +97,9 @@ namespace VoidEngine
                 buttonState = bState.UP;
                 SetAnimation("REG");
 
-                if (currentAnimation.fps > 0)
+                if (currentAnimation.framesPerMillisecond > 0)
                 {
-                    currentAnimation.fps -= currentAnimation.fps;
+                    currentAnimation.framesPerMillisecond -= currentAnimation.framesPerMillisecond;
                 }
             }
         }
@@ -110,14 +110,14 @@ namespace VoidEngine
         /// <param name="gameTime">The main GameTime</param>
         public override void Update(GameTime gameTime)
         {
-            currentAnimation.fps = gameTime.ElapsedGameTime.Milliseconds / 1000;
+            currentAnimation.framesPerMillisecond = gameTime.ElapsedGameTime.Milliseconds / 1000;
 
             MouseState mState = Mouse.GetState();
 
-            mX = mState.X;
-            mY = mState.Y;
-            pMPress = mPress;
-            mPress = mState.LeftButton == ButtonState.Pressed;
+            mouseX = mState.X;
+            mouseY = mState.Y;
+            previousMousePress = mousePress;
+            mousePress = mState.LeftButton == ButtonState.Pressed;
 
             updButton();
         }

@@ -82,7 +82,7 @@ namespace VoidEngine
         // The current AnimationSet.
         // </summary>
         public AnimationSet currentAnimation;
-        List<AnimationSet> animationSets = new List<AnimationSet>(); // The list of animation sets.
+        protected List<AnimationSet> animationSets = new List<AnimationSet>(); // The list of animation sets.
         Point currentFrame; // The current frame's position in sheet cords.
         int lastFrameTime; // frame time before the update.
 
@@ -143,7 +143,7 @@ namespace VoidEngine
             keyboardState = Keyboard.GetState();
             previousKeyboardState = keyboardState;
 
-            lastFrameFTime += gameTime.ElapsedGameTime.Milliseconds;
+            lastFrameTime += gameTime.ElapsedGameTime.Milliseconds;
 
             if (lastFrameTime >= currentAnimation.framesPerMillisecond)
             {
