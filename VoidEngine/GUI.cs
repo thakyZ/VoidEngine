@@ -12,79 +12,79 @@ using Microsoft.Xna.Framework.Media;
 
 namespace VoidEngine
 {
-    /// <summary>
-    ///
-    /// </summary>
-    public class GUI
-    {
-        public List<Rectangle> guiWindows;
-        public List<Color> guiWindowsColor;
-        public List<Texture2D> guiWindowsTexture;
-        public List<Button> guiButtons;
-        public Color shadedColor;
-        public Vector2 position;
-        public bool active = false;
+	/// <summary>
+	///
+	/// </summary>
+	public class GUI
+	{
+		public List<Rectangle> guiWindows;
+		public List<Color> guiWindowsColor;
+		public List<Texture2D> guiWindowsTexture;
+		public List<Button> guiButtons;
+		public Color shadedColor;
+		public Vector2 position;
+		public bool active = false;
 
 
-        public GUI(Vector2 position, List<Rectangle> guiWindows, List<Texture2D> guiWindowsTexture, List<Color> guiWindowsColor, List<Button> guiButtons, bool active)
-        {
-            this.guiWindows = guiWindows;
-            this.guiWindowsColor = guiWindowsColor;
-            this.guiWindowsTexture = guiWindowsTexture;
-            this.guiButtons = guiButtons;
-            this.position = position;
-            this.active = active;
-        }
+		public GUI(Vector2 position, List<Rectangle> guiWindows, List<Texture2D> guiWindowsTexture, List<Color> guiWindowsColor, List<Button> guiButtons, bool active)
+		{
+			this.guiWindows = guiWindows;
+			this.guiWindowsColor = guiWindowsColor;
+			this.guiWindowsTexture = guiWindowsTexture;
+			this.guiButtons = guiButtons;
+			this.position = position;
+			this.active = active;
+		}
 
-        public GUI(Vector2 position, List<Rectangle> guiWindows, List<Texture2D> guiWindowsTexture, List<Color> guiWindowsColor, List<Button> guiButtons, bool active, Color shadedColor)
-        {
-            this.guiWindows = guiWindows;
-            this.guiWindowsColor = guiWindowsColor;
-            this.guiWindowsTexture = guiWindowsTexture;
-            this.guiButtons = guiButtons;
-            this.position = position;
-            this.shadedColor = shadedColor;
-            this.active = active;
-        }
+		public GUI(Vector2 position, List<Rectangle> guiWindows, List<Texture2D> guiWindowsTexture, List<Color> guiWindowsColor, List<Button> guiButtons, bool active, Color shadedColor)
+		{
+			this.guiWindows = guiWindows;
+			this.guiWindowsColor = guiWindowsColor;
+			this.guiWindowsTexture = guiWindowsTexture;
+			this.guiButtons = guiButtons;
+			this.position = position;
+			this.shadedColor = shadedColor;
+			this.active = active;
+		}
 
-        public virtual void Update(GameTime gameTime)
-        {
-            foreach (Button b in guiButtons)
-            {
-                b.Update(gameTime);
-            }
-        }
+		public virtual void Update(GameTime gameTime)
+		{
+			foreach (Button b in guiButtons)
+			{
+				b.Update(gameTime);
+			}
+		}
 
-        public bool Clicked(int buttonIndex)
-        {
-            if (guiButtons[buttonIndex].Clicked())
-            {
-                return true;
-            }
+		public bool Clicked(int buttonIndex)
+		{
+			if (guiButtons[buttonIndex].Clicked())
+			{
+				return true;
+			}
 
-            return false;
-        }
+			return false;
+		}
 
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            if (active)
-            {
-                foreach (Rectangle r in guiWindows)
-                {
-                    foreach (Texture2D t in guiWindowsTexture)
-                    {
-                        foreach (Color c in guiWindowsColor)
-                        {
-                            foreach (Button b in guiButtons)
-                            {
-                                spriteBatch.Draw(t, new Rectangle(0, 0, (int)position.X, (int)position.Y), r, c);
+		public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+		{
+			if (active)
+			{
+				foreach (Rectangle r in guiWindows)
+				{
+					foreach (Texture2D t in guiWindowsTexture)
+					{
+						foreach (Color c in guiWindowsColor)
+						{
+							foreach (Button b in guiButtons)
+							{
+								spriteBatch.Draw(t, new Rectangle(0, 0, (int)position.X, (int)position.Y), r, c);
 
-                                b.Draw(gameTime, spriteBatch);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+								b.Draw(gameTime, spriteBatch);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

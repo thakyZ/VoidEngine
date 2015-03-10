@@ -104,7 +104,7 @@ namespace VoidEngine
 		/// <param name="gameTime"></param>
 		public void Update(GameTime gameTime)
 		{
-			parallax = camera.OverallPlayerPosition.X * multiplier;
+			parallax = camera.Position.X * multiplier;
 		}
 
 		/// <summary>

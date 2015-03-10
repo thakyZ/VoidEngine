@@ -1,16 +1,17 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Resources;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("VoidEngine")]
-[assembly: AssemblyProduct("VoidEngine")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyCompany("MSD")]
-[assembly: AssemblyCopyright("Copyright © MSD 2014")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTitle("Void Engine")]
+[assembly: AssemblyProduct("Void Engine")]
+[assembly: AssemblyDescription("An game engine that runs off of Microsoft XNA")]
+[assembly: AssemblyCompany("TZCraft NSR")]
+[assembly: AssemblyCopyright("Copyright © TZCraft NSR 2015")]
+[assembly: AssemblyTrademark("GPU GNL")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -31,4 +32,6 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.0.1.2")]
+[assembly: AssemblyFileVersionAttribute("0.0.1.2")]
+[assembly: NeutralResourcesLanguageAttribute("en-US")]

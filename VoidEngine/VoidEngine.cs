@@ -11,16 +11,16 @@ using Microsoft.Xna.Framework.Media;
 
 namespace VoidEngine
 {
-    /// <summary>
-    /// The main class of this engine.
-    /// </summary>
-    public class VoidEngine
-    {
-        /// <summary>
-        /// Do not use this modifier, It does nothing.
-        /// </summary>
-        public VoidEngine()
-        {
-        }
-    }
+	/// <summary>
+	/// The main class of this engine.
+	/// </summary>
+	public class VoidEngine
+	{
+		/// <summary>
+		/// Do not use this modifier, It does nothing.
+		/// </summary>
+		public VoidEngine()
+		{
+		}
+	}
 }
