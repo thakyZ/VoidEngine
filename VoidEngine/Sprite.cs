@@ -261,15 +261,22 @@ namespace VoidEngine
 		/// Flips the sprite texture based off a bool
 		/// </summary>
 		/// <param name="isFlip">The bool to flip</param>
-		protected void FlipSprite(bool isFlip)
+		protected void FlipSprite(bool isFlip, bool flipHorizontally, bool flipVertically)
 		{
-			if (isFlip)
+			if (!isFlip)
+			{
+				isFlipped = SpriteEffects.None;
+
+				return;
+			}
+
+			if (isFlip && flipHorizontally)
 			{
 				isFlipped = SpriteEffects.FlipHorizontally;
 			}
-			else
+			if (isFlip && flipVertically)
 			{
-				isFlipped = SpriteEffects.None;
+				isFlipped = SpriteEffects.FlipVertically;
 			}
 		}
 	}
