@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,24 +23,31 @@ namespace VoidEngine
 		Vector2 overallPlayerPosition;
 		float rotation;
 		public Vector2 viewportSize;
-		int worldWidth;
-		int worldHeight;
+		Point worldSize;
 		Vector2 screenCenter;
 		Vector2 origin;
 
-		public Camera(Viewport viewport, int worldWidth, int worldHeight, float initialZoom)
+		/// <summary>
+		/// Creates the camera.
+		/// </summary>
+		/// <param name="viewport">The viewport that the game uses.</param>
+		/// <param name="worldSize">The size of the world.</param>
+		/// <param name="initalZoom">The starting zoom position.</param>
+		public Camera(Viewport viewport, Point worldSize, float initialZoom)
 		{
 			zoom = initialZoom;
 			rotation = 0.0f;
 			position = Vector2.Zero;
 			overallPlayerPosition = Vector2.Zero;
 			viewportSize = new Vector2(viewport.Width, viewport.Height);
-			this.worldWidth = worldWidth;
-			this.worldHeight = worldHeight;
+			this.worldSize = worldSize;
 			screenCenter = new Vector2(viewport.Width / 2, viewport.Height / 2);
 			origin = screenCenter / zoom;
 		}
 
+		/// <summary>
+		/// Gets or sets the zoom of the camera.
+		/// </summary>
 		public float Zoom
 		{
 			get
@@ -62,6 +69,9 @@ namespace VoidEngine
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the rotation of the camera.
+		/// </summary>
 		public float Rotation
 		{
 			get
@@ -73,52 +83,34 @@ namespace VoidEngine
 				rotation = value;
 			}
 		}
-
-		public Vector2 Size
+		
+		/// <summary>
+		/// Gets or sets the world size.
+		/// <summary>
+		public Point Size
 		{
 			get
 			{
-				return new Vector2(worldWidth, worldHeight);
+				return worldSize;
+			}
+			set
+			{
+				worldSize.X = value.X;
+				worldSize.Y = value.Y;
 			}
 		}
 
+		/// <summary>
+		/// Moves the camera by an amount.
+		/// </summary>
 		public void Move(Vector2 amount)
 		{
 			position += amount;
 		}
 
-		public Vector2 OverallPlayerPosition
-		{
-			get
-			{
-				return overallPlayerPosition;
-			}
-			set
-			{
-				float leftBarrier = (float)viewportSize.X * -1f / zoom;
-				float rightBarrier = worldWidth - (float)viewportSize.X * -1f / zoom;
-				float topBarrier = worldHeight - (float)viewportSize.Y * -1f / zoom;
-				float bottomBarrier = (float)viewportSize.Y * -1f / zoom;
-				overallPlayerPosition = value;
-				if (overallPlayerPosition.X < leftBarrier)
-				{
-					overallPlayerPosition.X = leftBarrier;
-				}
-				if (overallPlayerPosition.X > rightBarrier)
-				{
-					overallPlayerPosition.X = rightBarrier;
-				}
-				if (overallPlayerPosition.Y > topBarrier)
-				{
-					overallPlayerPosition.Y = topBarrier;
-				}
-				if (overallPlayerPosition.Y < bottomBarrier)
-				{
-					overallPlayerPosition.Y = bottomBarrier;
-				}
-			}
-		}
-
+		/// <summary>
+		/// Gets or sets the cameras position.
+		/// </summary>
 		public Vector2 Position
 		{
 			get
@@ -128,8 +120,8 @@ namespace VoidEngine
 			set
 			{
 				float leftBarrier = (float)viewportSize.X * .5f / zoom;
-				float rightBarrier = worldWidth - (float)viewportSize.X * .5f / zoom;
-				float topBarrier = worldHeight - (float)viewportSize.Y * .5f / zoom;
+				float rightBarrier = (float)worldSize.X - (float)viewportSize.X * .5f / zoom;
+				float topBarrier = (float)worldSize.Y - (float)viewportSize.Y * .5f / zoom;
 				float bottomBarrier = (float)viewportSize.Y * .5f / zoom;
 				position = value;
 				if (position.X < leftBarrier)
@@ -151,6 +143,9 @@ namespace VoidEngine
 			}
 		}
 
+		/// <summary>
+		/// Gets the matrix transformation of the camera.
+		/// </summary>
 		public Matrix GetTransformation()
 		{
 			transform = Matrix.CreateTranslation(new Vector3(-position.X, -position.Y, 0)) * Matrix.CreateRotationZ(Rotation) * Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) * Matrix.CreateTranslation(new Vector3(viewportSize.X * 0.5f, viewportSize.Y * 0.5f, 0));

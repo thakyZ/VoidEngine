@@ -19,8 +19,9 @@ namespace VoidEngine
 		RenderTarget2D renderTarget1;
 		RenderTarget2D renderTarget2;
 
-
-		// Choose what display settings the bloom should use.
+		/// <summary>
+		/// Choose what display settings the bloom should use.
+		/// </summary>
 		public BloomSettings Settings
 		{
 			get
@@ -35,10 +36,11 @@ namespace VoidEngine
 
 		BloomSettings settings = BloomSettings.PresetSettings[0];
 
-
-		// Optionally displays one of the intermediate buffers used
-		// by the bloom postprocess, so you can see exactly what is
-		// being drawn into each rendertarget.
+		/// <summary>
+		/// Optionally displays one of the intermediate buffers used
+		/// by the bloom postprocess, so you can see exactly what is
+		/// being drawn into each rendertarget.
+		/// </summary>
 		public enum IntermediateBuffer
 		{
 			PreBloom,
@@ -47,6 +49,9 @@ namespace VoidEngine
 			FinalResult,
 		}
 
+		/// <summary>
+		/// The buffer that the bloom effect renders at.
+		/// </summary>
 		public IntermediateBuffer ShowBuffer
 		{
 			get
@@ -61,6 +66,9 @@ namespace VoidEngine
 
 		IntermediateBuffer showBuffer = IntermediateBuffer.FinalResult;
 
+		/// <summary>
+		/// The creator for the bloom effect.
+		/// </summary>
 		public BloomComponent(Game game)
 			: base(game)
 		{

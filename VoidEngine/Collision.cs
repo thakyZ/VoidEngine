@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,13 +6,30 @@ using Microsoft.Xna.Framework;
 
 namespace VoidEngine
 {
+	/// <summary>
+	/// This class doesn't always like to work, use as your own descetion.
+	/// </summary>
 	public class Collision
 	{
+		/// <summary>
+		/// Creates a map segment.
+		/// </summary>
 		public struct MapSegment
 		{
+			/// <summary>
+			/// The cordinates of the top left.
+			/// </summary>
 			public Point point1;
+			/// <summary>
+			/// The cordiates of the bottom right.
+			/// </summary>
 			public Point point2;
 
+			/// <summary>
+			/// Creates the map segment.
+			/// </summary>
+			/// <param name="a">The cordinates of the top left.</param>
+			/// <param name="b">The cordinates of the bottom right.</param>
 			public MapSegment(Point a, Point b)
 			{
 				point1 = a;

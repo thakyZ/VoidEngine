@@ -13,14 +13,14 @@ using Microsoft.Xna.Framework.Media;
 namespace VoidEngine
 {
 	/// <summary>
-	/// The Button class for the Void Engine
+	/// The button class for the VoidEngine
 	/// </summary>
 	public class Button : Sprite
 	{
 		/// <summary>
 		/// This is the Void Engine button's state enum
 		/// </summary>
-		public enum bState
+		protected enum bState
 		{
 			HOVER,
 			UP,
@@ -28,21 +28,28 @@ namespace VoidEngine
 			RELEASED
 		}
 
-		Label label; // This is the label that the button has overlayed on it.
+		protected Label label; // This is the label that the button has overlayed on it.
 
-		bState buttonState = new bState(); // This is the button state variable
-		bool mousePress = false; // This
-		bool previousMousePress = false;
-		int mouseX;
-		int mouseY;
-		Rectangle testCollision;
+		protected bState buttonState = new bState(); // This is the button state variable
+		protected bool mousePress = false; // This
+		protected bool previousMousePress = false;
+		protected Point mouseCords;
+		protected Rectangle testCollision;
 
 		/// <summary>
 		/// Creates a button.
+		/// When creating the button's animation set,
+		/// the normal button texture has to be called "IDLE",
+		/// the hover button texture has to be called "HOVER",
+		/// the pressed button texture has to be called "PRESSED".
 		/// </summary>
-		/// <param name="position">The position for the button.</param>
-		/// <param name="font">The font for the text in the button.</param>
-		/// <param name="text">The text in the button.</param>
+		/// <param name="position">The starting position of the button.</param>
+		/// <param name="font">The font to use in the button</param>
+		/// <param name="scale">The scale of the text in the button</param>
+		/// <param name="fontColor">The color of the font to use in the button.</param>
+		/// <param name="text">The text inside the button</param>
+		/// <param name="color">The color to mask the button texture with.</param>
+		/// <param name="animationSetList">The animation set list to use on the button.</param>
 		public Button(Vector2 position, SpriteFont font, float scale, Color fontColor, string text, Color color, List<Sprite.AnimationSet> animationSetList)
 			: base(position, color, animationSetList)
 		{
@@ -52,19 +59,19 @@ namespace VoidEngine
 		}
 
 		/// <summary>
-		/// The test for hitButtonAlpha overload 0.
+		/// Returns if the button is hovered over or not.
 		/// </summary>
-		/// <param name="tx">The texture's x</param>
+		/// <param name="tx">The texture of the button</param>
 		/// <param name="ty">The texture's y</param>
 		/// <param name="frameTex">the texture's width and height in Point</param>
 		/// <param name="x">the x of mouse</param>
 		/// <param name="y">the y of mouse</param>
 		/// <returns>Boolean</returns>
-		Boolean hitButtonAlpha(float textureX, float textureY, Point frameSize, int x, int y)
+		protected Boolean hitButtonAlpha(Vector2 textureSize, Point frameSize, Point mouseCords)
 		{
-			testCollision = new Rectangle((int)textureX, (int)textureY, frameSize.X, frameSize.Y);
+			testCollision = new Rectangle((int)textureSize.X, (int)textureSize.Y, frameSize.X, frameSize.Y);
 
-			if (testCollision.Intersects(new Rectangle(x, y, 1, 1)))
+			if (testCollision.Intersects(new Rectangle(mouseCords.X, mouseCords.Y, 1, 1)))
 			{
 				return true;
 			}
@@ -73,11 +80,18 @@ namespace VoidEngine
 		}
 
 		/// <summary>
-		/// Updates the button without the mouse, exectutes the hitButtonAlpha function too.
+		/// Updates the button with the mouse's cords and state
 		/// </summary>
-		public void updButton()
+		/// <param name="gameTime">The game time that the game runs off of.</param>
+		public override void Update(GameTime gameTime)
 		{
-			if (hitButtonAlpha(Position.X, Position.Y, CurrentAnimation.frameSize, mouseX, mouseY))
+			MouseState mState = Mouse.GetState();
+
+			mouseCords = new Point(mState.X, mState.Y);
+			previousMousePress = mousePress;
+			mousePress = mState.LeftButton == ButtonState.Pressed;
+			
+			if (hitButtonAlpha(Position, CurrentAnimation.frameSize, mouseCords))
 			{
 				if (mousePress)
 				{
@@ -89,7 +103,7 @@ namespace VoidEngine
 					if (buttonState == bState.DOWN)
 					{
 						buttonState = bState.RELEASED;
-						SetAnimation("REG");
+						SetAnimation("IDLE");
 					}
 				}
 				else
@@ -101,29 +115,14 @@ namespace VoidEngine
 			else
 			{
 				buttonState = bState.UP;
-				SetAnimation("REG");
+				SetAnimation("IDLE");
 			}
 		}
 
 		/// <summary>
-		/// Updates the button with the mouse's cords and state
+		/// Returns weither if the button was clicked.
 		/// </summary>
-		/// <param name="gameTime">The main GameTime</param>
-		public override void Update(GameTime gameTime)
-		{
-			MouseState mState = Mouse.GetState();
-
-			mouseX = mState.X;
-			mouseY = mState.Y;
-			previousMousePress = mousePress;
-			mousePress = mState.LeftButton == ButtonState.Pressed;
-
-			updButton();
-		}
-
-		/// <summary>
-		/// Returns true if the button was clicked
-		/// </summary>
+		/// <returns>Boolean</returns>
 		public bool Clicked()
 		{
 			if (buttonState == bState.RELEASED)
@@ -135,10 +134,10 @@ namespace VoidEngine
 		}
 
 		/// <summary>
-		/// Draws the button
+		/// Used to draw the button.
 		/// </summary>
-		/// <param name="gameTime">The main GameTime</param>
-		/// <param name="spriteBatch">The main SpriteBatch</param>
+		/// <param name="gameTime">The game time that the game runs off of.</param>
+		/// <param name="spriteBatch">The sprite batch used to draw with.</param>
 		public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
 		{
 			base.Draw(gameTime, spriteBatch);

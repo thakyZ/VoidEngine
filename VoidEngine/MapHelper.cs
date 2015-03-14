@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +7,14 @@ namespace VoidEngine
 {
 	public static class MapHelper
 	{
-		public static uint[,] GetBrickArray(List<string> lines)
+		/// <summary>
+		/// Returns the formated array from a list of strings.
+		/// '.' and ',' return 0.
+		/// '1'-'9', 'a'-'z', 'A'-'Z', and all symbols on a english keyboard
+		/// except ' and " will return 1 to 84 respectifully.
+		public static uint[,] GetTileArray(List<string> lines)
 		{
-			uint[,] brickArray = new uint[lines[0].Length, lines.Count];
+			uint[,] tileArray = new uint[lines[0].Length, lines.Count];
 			for (int i = 0; i < lines[0].Length; i++)
 			{
 				for (int j = 0; j < lines.Count; j++)
@@ -17,119 +22,269 @@ namespace VoidEngine
 					switch (lines[j][i])
 					{
 						case '.':
-							brickArray[i, j] = 0;
+							tileArray[i, j] = 0;
+							break;
+						case ' ':
+							tileArray[i, j] = 0;
 							break;
 						case '1':
-							brickArray[i, j] = 1;
+							tileArray[i, j] = 1;
 							break;
 						case '2':
-							brickArray[i, j] = 2;
+							tileArray[i, j] = 2;
 							break;
 						case '3':
-							brickArray[i, j] = 3;
+							tileArray[i, j] = 3;
 							break;
 						case '4':
-							brickArray[i, j] = 4;
+							tileArray[i, j] = 4;
 							break;
 						case '5':
-							brickArray[i, j] = 5;
+							tileArray[i, j] = 5;
 							break;
 						case '6':
-							brickArray[i, j] = 6;
+							tileArray[i, j] = 6;
 							break;
 						case '7':
-							brickArray[i, j] = 7;
+							tileArray[i, j] = 7;
 							break;
 						case '8':
-							brickArray[i, j] = 8;
+							tileArray[i, j] = 8;
 							break;
 						case '9':
-							brickArray[i, j] = 9;
+							tileArray[i, j] = 9;
 							break;
 						case 'a':
-							brickArray[i, j] = 10;
+							tileArray[i, j] = 10;
 							break;
 						case 'b':
-							brickArray[i, j] = 11;
+							tileArray[i, j] = 11;
 							break;
 						case 'c':
-							brickArray[i, j] = 12;
+							tileArray[i, j] = 12;
 							break;
 						case 'd':
-							brickArray[i, j] = 13;
+							tileArray[i, j] = 13;
 							break;
 						case 'e':
-							brickArray[i, j] = 14;
+							tileArray[i, j] = 14;
 							break;
 						case 'f':
-							brickArray[i, j] = 15;
+							tileArray[i, j] = 15;
 							break;
 						case 'g':
-							brickArray[i, j] = 16;
+							tileArray[i, j] = 16;
 							break;
 						case 'h':
-							brickArray[i, j] = 17;
+							tileArray[i, j] = 17;
 							break;
 						case 'i':
-							brickArray[i, j] = 18;
+							tileArray[i, j] = 18;
 							break;
 						case 'j':
-							brickArray[i, j] = 19;
+							tileArray[i, j] = 19;
 							break;
 						case 'k':
-							brickArray[i, j] = 20;
+							tileArray[i, j] = 20;
 							break;
 						case 'l':
-							brickArray[i, j] = 21;
+							tileArray[i, j] = 21;
 							break;
 						case 'm':
-							brickArray[i, j] = 22;
+							tileArray[i, j] = 22;
 							break;
 						case 'n':
-							brickArray[i, j] = 23;
+							tileArray[i, j] = 23;
 							break;
 						case 'o':
-							brickArray[i, j] = 24;
+							tileArray[i, j] = 24;
 							break;
 						case 'p':
-							brickArray[i, j] = 25;
+							tileArray[i, j] = 25;
 							break;
 						case 'q':
-							brickArray[i, j] = 26;
+							tileArray[i, j] = 26;
 							break;
 						case 'r':
-							brickArray[i, j] = 27;
+							tileArray[i, j] = 27;
 							break;
 						case 's':
-							brickArray[i, j] = 28;
+							tileArray[i, j] = 28;
 							break;
 						case 't':
-							brickArray[i, j] = 29;
+							tileArray[i, j] = 29;
 							break;
 						case 'u':
-							brickArray[i, j] = 30;
+							tileArray[i, j] = 30;
 							break;
 						case 'v':
-							brickArray[i, j] = 31;
+							tileArray[i, j] = 31;
 							break;
 						case 'w':
-							brickArray[i, j] = 32;
+							tileArray[i, j] = 32;
 							break;
 						case 'x':
-							brickArray[i, j] = 33;
+							tileArray[i, j] = 33;
 							break;
 						case 'y':
-							brickArray[i, j] = 34;
+							tileArray[i, j] = 34;
 							break;
 						case 'z':
-							brickArray[i, j] = 35;
+							tileArray[i, j] = 35;
+							break;
+						case 'A':
+							tileArray[i, j] = 36;
+							break;
+						case 'B':
+							tileArray[i, j] = 37;
+							break;
+						case 'C':
+							tileArray[i, j] = 38;
+							break;
+						case 'D':
+							tileArray[i, j] = 39;
+							break;
+						case 'E':
+							tileArray[i, j] = 40;
+							break;
+						case 'F':
+							tileArray[i, j] = 41;
+							break;
+						case 'G':
+							tileArray[i, j] = 42;
+							break;
+						case 'H':
+							tileArray[i, j] = 43;
+							break;
+						case 'I':
+							tileArray[i, j] = 44;
+							break;
+						case 'J':
+							tileArray[i, j] = 45;
+							break;
+						case 'K':
+							tileArray[i, j] = 46;
+							break;
+						case 'L':
+							tileArray[i, j] = 47;
+							break;
+						case 'M':
+							tileArray[i, j] = 48;
+							break;
+						case 'N':
+							tileArray[i, j] = 49;
+							break;
+						case 'O':
+							tileArray[i, j] = 50;
+							break;
+						case 'P':
+							tileArray[i, j] = 51;
+							break;
+						case 'Q':
+							tileArray[i, j] = 52;
+							break;
+						case 'R':
+							tileArray[i, j] = 53;
+							break;
+						case 'S':
+							tileArray[i, j] = 54;
+							break;
+						case 'T':
+							tileArray[i, j] = 55;
+							break;
+						case 'U':
+							tileArray[i, j] = 56;
+							break;
+						case 'V':
+							tileArray[i, j] = 57;
+							break;
+						case 'W':
+							tileArray[i, j] = 58;
+							break;
+						case 'X':
+							tileArray[i, j] = 58;
+							break;
+						case 'Y':
+							tileArray[i, j] = 59;
+							break;
+						case 'Z':
+							tileArray[i, j] = 60;
+							break;
+						case '!':
+							tileArray[i, j] = 61;
+							break;
+						case '@':
+							tileArray[i, j] = 62;
+							break;
+						case '#':
+							tileArray[i, j] = 63;
+							break;
+						case '$':
+							tileArray[i, j] = 64;
+							break;
+						case '*':
+							tileArray[i, j] = 65;
+							break;
+						case '(':
+							tileArray[i, j] = 66;
+							break;
+						case ')':
+							tileArray[i, j] = 67;
+							break;
+						case '_':
+							tileArray[i, j] = 68;
+							break;
+						case '-':
+							tileArray[i, j] = 69;
+							break;
+						case '+':
+							tileArray[i, j] = 70;
+							break;
+						case '=':
+							tileArray[i, j] = 71;
+							break;
+						case '{':
+							tileArray[i, j] = 72;
+							break;
+						case '}':
+							tileArray[i, j] = 73;
+							break;
+						case '[':
+							tileArray[i, j] = 74;
+							break;
+						case ']':
+							tileArray[i, j] = 75;
+							break;
+						case '|':
+							tileArray[i, j] = 76;
+							break;
+						case ':':
+							tileArray[i, j] = 78;
+							break;
+						case ';':
+							tileArray[i, j] = 79;
+							break;
+						case '<':
+							tileArray[i, j] = 80;
+							break;
+						case ',':
+							tileArray[i, j] = 81;
+							break;
+						case '>':
+							tileArray[i, j] = 82;
+							break;
+						case '?':
+							tileArray[i, j] = 83;
+							break;
+						case '/':
+							tileArray[i, j] = 84;
 							break;
 						default:
 							break;
 					}
 				}
 			}
-			return brickArray;
+			return tileArray;
 		}
 	}
 }
