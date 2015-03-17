@@ -280,7 +280,7 @@ namespace VoidEngine
 		/// <param name="spriteBatch">The sprite batch to draw from.</param>
 		public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(CurrentAnimation.texture, this.Position, new Rectangle((int)RotationCenter.X + CurrentAnimation.startPosition.X + (CurrentFrame.X * CurrentAnimation.frameSize.X), (int)RotationCenter.Y + CurrentAnimation.startPosition.Y + (CurrentFrame.Y * CurrentAnimation.frameSize.Y), CurrentAnimation.frameSize.X, CurrentAnimation.frameSize.Y), _Color, Rotation, RotationCenter, 1f, flipEffect, 0);
+			spriteBatch.Draw(CurrentAnimation.texture, Position + RotationCenter, new Rectangle(CurrentAnimation.startPosition.X + (CurrentFrame.X * CurrentAnimation.frameSize.X), CurrentAnimation.startPosition.Y + (CurrentFrame.Y * CurrentAnimation.frameSize.Y), CurrentAnimation.frameSize.X, CurrentAnimation.frameSize.Y), _Color, Rotation, RotationCenter, 1f, flipEffect, 0);
 		}
 
 		/// <summary>
