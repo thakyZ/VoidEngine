@@ -259,25 +259,25 @@ namespace VoidEngine
 							tileArray[i, j] = 76;
 							break;
 						case ':':
-							tileArray[i, j] = 78;
+							tileArray[i, j] = 77;
 							break;
 						case ';':
-							tileArray[i, j] = 79;
+							tileArray[i, j] = 78;
 							break;
 						case '<':
-							tileArray[i, j] = 80;
+							tileArray[i, j] = 79;
 							break;
 						case ',':
-							tileArray[i, j] = 81;
+							tileArray[i, j] = 80;
 							break;
 						case '>':
-							tileArray[i, j] = 82;
+							tileArray[i, j] = 81;
 							break;
 						case '?':
-							tileArray[i, j] = 83;
+							tileArray[i, j] = 82;
 							break;
 						case '/':
-							tileArray[i, j] = 84;
+							tileArray[i, j] = 83;
 							break;
 						default:
 							break;

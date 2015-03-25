@@ -100,7 +100,6 @@
     <Compile Include="MapHelper.cs" />
     <Compile Include="ParallaxBackground.cs" />
     <Compile Include="GUI.cs" />
-    <Compile Include="Pathing.cs" />
     <Compile Include="RectangleHelper.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="VoidEngine.cs" />

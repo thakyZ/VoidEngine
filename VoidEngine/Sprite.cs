@@ -73,7 +73,8 @@ namespace VoidEngine
 		public enum Axis
 		{
 			X,
-			Y
+			Y,
+			NONE
 		}
 
 		#region Animations
@@ -97,7 +98,7 @@ namespace VoidEngine
 		/// <summary>
 		/// Gets or sets the animations frame tick time.
 		/// </summary>
-		private int LastFrameTime
+		protected int LastFrameTime
 		{
 			get;
 			set;
@@ -105,7 +106,7 @@ namespace VoidEngine
 		/// <summary>
 		/// Gets or sets the SpriteEffects value of the sprite.
 		/// </summary>
-		private SpriteEffects flipEffect
+		protected SpriteEffects flipEffect
 		{
 			get;
 			set;
@@ -124,6 +125,18 @@ namespace VoidEngine
 				
 				return false;
 			}
+		}
+		/// <summary>
+		/// The offset position of the sprite.
+		/// </summary>
+		public Vector2 Offset = Vector2.Zero;
+		/// <summary>
+		/// Gets ors sets the scale factor of the sprite.
+		/// </summary>
+		public float Scale
+		{
+			get;
+			protected set;
 		}
 		#endregion
 		#region Movement
@@ -184,7 +197,7 @@ namespace VoidEngine
 		/// The point to move the sprite from.
 		/// Other wise known as the origin.
 		/// </summary>
-		public Vector2 RotationCenter;
+		public Vector2 RotationCenter = Vector2.Zero;
 		/// <summary>
 		/// Gets or sets weither the spite can move or not.
 		/// Can be only set by child or self.
@@ -241,6 +254,7 @@ namespace VoidEngine
 			Position = position;
 			LastFrameTime = 0;
 			_Color = color;
+			Scale = 1f;
 		}
 
 		/// <summary>
@@ -280,7 +294,7 @@ namespace VoidEngine
 		/// <param name="spriteBatch">The sprite batch to draw from.</param>
 		public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(CurrentAnimation.texture, Position + RotationCenter, new Rectangle(CurrentAnimation.startPosition.X + (CurrentFrame.X * CurrentAnimation.frameSize.X), CurrentAnimation.startPosition.Y + (CurrentFrame.Y * CurrentAnimation.frameSize.Y), CurrentAnimation.frameSize.X, CurrentAnimation.frameSize.Y), _Color, Rotation, RotationCenter, 1f, flipEffect, 0);
+			spriteBatch.Draw(CurrentAnimation.texture, Position - Offset, new Rectangle(CurrentAnimation.startPosition.X + (CurrentFrame.X * CurrentAnimation.frameSize.X), CurrentAnimation.startPosition.Y + (CurrentFrame.Y * CurrentAnimation.frameSize.Y), CurrentAnimation.frameSize.X, CurrentAnimation.frameSize.Y), _Color, Rotation, RotationCenter, Scale, flipEffect, 0);
 		}
 
 		/// <summary>
@@ -308,31 +322,20 @@ namespace VoidEngine
 		/// </summary>
 		/// <param name="isFlip">The bool to flip</param>
 		/// <param name="axis">The axis to flip on</param>
-		protected void FlipSprite(bool isFlip, Axis axis)
+		protected void FlipSprite(Axis axis)
 		{
-			if (!isFlip)
-			{
-				flipEffect = SpriteEffects.None;
-
-				return;
-			}
-
-			if (isFlip && axis == Axis.Y)
+			if (axis == Axis.Y)
 			{
 				flipEffect = SpriteEffects.FlipHorizontally;
 			}
-			if (isFlip && axis == Axis.X)
+			if (axis == Axis.X)
 			{
 				flipEffect = SpriteEffects.FlipVertically;
 			}
-		}
-		
-		/// <summary>
-		/// This method is like the original but only flips the spirte back to normal.
-		/// </summary>
-		protected void FlipSprite()
-		{
-			flipEffect = SpriteEffects.None;
+			if (axis == Axis.NONE)
+			{
+				flipEffect = SpriteEffects.None;
+			}
 		}
 	}
 }
