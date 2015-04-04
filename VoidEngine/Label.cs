@@ -42,7 +42,7 @@ namespace VoidEngine
 
 		public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
 		{
-			Vector2 FontOrigin = texture.MeasureString(text) / 2;
+			//Vector2 FontOrigin = texture.MeasureString(text) / 2;
 			// Draw the string
 			spriteBatch.DrawString(texture, text, position, color, 0, new Vector2(0, 0), scale, SpriteEffects.None, 0.5f);
 		}

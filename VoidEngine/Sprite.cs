@@ -46,6 +46,10 @@ namespace VoidEngine
 			/// The tick of the animation.
 			/// </summary>
 			public int framesPerMillisecond;
+			/// <summary>
+			/// 
+			/// </summary>
+			public bool isLooping;
 
 			/// <summary>
 			/// For creating a new animation set.
@@ -56,7 +60,7 @@ namespace VoidEngine
 			/// <param name="sheetSize">The amount of frames in the animation.</param>
 			/// <param name="startPosition">The starting cordinates of the animation on the spritesheet.</param>
 			/// <param name="framesPerMillisecond">The tick of the animation.</param>
-			public AnimationSet(string name, Texture2D texture, Point frameSize, Point sheetSize, Point startPosition, int framesPerMillisecond)
+			public AnimationSet(string name, Texture2D texture, Point frameSize, Point sheetSize, Point startPosition, int framesPerMillisecond, bool isLooping)
 			{
 				this.name = name;
 				this.texture = texture;
@@ -64,6 +68,7 @@ namespace VoidEngine
 				this.sheetSize = sheetSize;
 				this.startPosition = startPosition;
 				this.framesPerMillisecond = framesPerMillisecond;
+				this.isLooping = isLooping;
 			}
 		}
 		
@@ -136,26 +141,10 @@ namespace VoidEngine
 		public float Scale
 		{
 			get;
-			protected set;
+			set;
 		}
 		#endregion
 		#region Movement
-		/// <summary>
-		/// The direction the player is moving twords.
-		/// Can only be used by child or self.
-		/// Only use -1, 0, or 1.
-		/// </summary>
-		protected Vector2 Direction;
-		/// <summary>
-		/// Gets the dirtection of the sprite.
-		/// </summary>
-		public Vector2 GetDirection
-		{
-			get
-			{
-				return Direction;
-			}
-		}
 		/// <summary>
 		/// The position that the player is at.
 		/// Can only be used by child or self.
@@ -172,15 +161,15 @@ namespace VoidEngine
 			}
 		}
 		/// <summary>
-		/// Gets or sets the Speed that the sprite moves at.
-		/// Can only be set by child or self.
-		/// Used for the movement speed of the sprite.
-		/// It is recomended to use values between -1 and 1.
-		/// <summary>
-		public float Speed
+		/// 
+		/// </summary>
+		public Vector2 SetPosition
 		{
-			get;
-			protected set;
+			set
+			{
+				Position.X = value.X;
+				Position.Y = value.Y;
+			}
 		}
 		/// <summary>
 		/// Gets or sets the rotation of the sprite.
@@ -198,36 +187,6 @@ namespace VoidEngine
 		/// Other wise known as the origin.
 		/// </summary>
 		public Vector2 RotationCenter = Vector2.Zero;
-		/// <summary>
-		/// Gets or sets weither the spite can move or not.
-		/// Can be only set by child or self.
-		/// Used to stop the player from moving.
-		/// </summary>
-		public bool CanMove
-		{
-			get;
-			protected set;
-		}
-		/// <summary>
-		/// Gets or sets if the sprite is moving.
-		/// Can be only set by child or self.
-		/// Used to tell if the player is moving.
-		/// </summary>
-		public bool isMoving
-		{
-			get;
-			protected set;
-		}
-		/// <summary>
-		/// Gets or sets the list of keys that the sprite uses.
-		/// Can be only set by child or self.
-		/// Indexes: [0]: Left | [1]: Up | [2]: Right | [3]: Down | [4]: Custom1 | [5]: Custom2 | [6]: Custom3 | [?]: etc.
-		/// </summary>
-		public List<Keys> MovementKeys
-		{
-			get;
-			protected set;
-		}
 		#endregion
 
 		/// <summary>
@@ -248,7 +207,6 @@ namespace VoidEngine
 		/// <param name="animationSetList">The animation set of the sprite.</param>
 		public Sprite(Vector2 position, Color color, List<AnimationSet> animationSetList)
 		{
-			MovementKeys = new List<Keys>();
 			AnimationSets = new List<AnimationSet>();
 			AnimationSets = animationSetList;
 			Position = position;
@@ -265,25 +223,7 @@ namespace VoidEngine
 		/// <param name="gameTime">The game time that the game runs off of.</param>
 		public virtual void Update(GameTime gameTime)
 		{
-			LastFrameTime += gameTime.ElapsedGameTime.Milliseconds;
-
-			if (LastFrameTime >= CurrentAnimation.framesPerMillisecond)
-			{
-				CurrentFrame.X++;
-
-				if (CurrentFrame.X >= CurrentAnimation.sheetSize.X)
-				{
-					CurrentFrame.Y++;
-					CurrentFrame.X = 0;
-
-					if (CurrentFrame.Y >= CurrentAnimation.sheetSize.Y)
-					{
-						CurrentFrame.Y = 0;
-					}
-				}
-
-				LastFrameTime = 0;
-			}
+			HandleAnimations(gameTime);
 		}
 
 		/// <summary>
@@ -335,6 +275,40 @@ namespace VoidEngine
 			if (axis == Axis.NONE)
 			{
 				flipEffect = SpriteEffects.None;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="gameTime"></param>
+		protected void HandleAnimations(GameTime gameTime)
+		{
+			LastFrameTime += gameTime.ElapsedGameTime.Milliseconds;
+
+			if (LastFrameTime >= CurrentAnimation.framesPerMillisecond)
+			{
+				CurrentFrame.X++;
+
+				if (CurrentFrame.X >= CurrentAnimation.sheetSize.X)
+				{
+					CurrentFrame.Y++;
+					if (CurrentAnimation.isLooping)
+					{
+						CurrentFrame.X = 0;
+					}
+					else
+					{
+						CurrentFrame.X = CurrentAnimation.sheetSize.X;
+					}
+
+					if (CurrentFrame.Y >= CurrentAnimation.sheetSize.Y)
+					{
+						CurrentFrame.Y = 0;
+					}
+				}
+
+				LastFrameTime = 0;
 			}
 		}
 	}

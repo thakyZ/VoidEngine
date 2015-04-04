@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace VoidEngine
 {
@@ -284,7 +287,27 @@ namespace VoidEngine
 					}
 				}
 			}
+			
 			return tileArray;
+		}
+		
+		public static Tile.TileCollisions GetCollisions(int x, int y, Tile[,] TileList)
+		{
+			if (x < 0 || x > TileList.GetLength(0) * 35)
+			{
+				return Tile.TileCollisions.Impassable;
+			}
+			if (y < 0 || y > TileList.GetLength(1) * 35)
+			{
+				return Tile.TileCollisions.Passable;
+			}
+			
+			return TileList[y, x].tileCollisions;
+		}
+		
+		public static Rectangle GetBounds(int x, int y)
+		{
+			return new Rectangle(x * 35, y * 35, 35, 35);
 		}
 	}
 }
