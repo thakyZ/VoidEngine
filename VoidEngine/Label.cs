@@ -17,11 +17,11 @@ namespace VoidEngine
 	/// </summary>
 	public class Label
 	{
-		protected string text;
+		public string text;
 		protected SpriteFont texture;
-		protected Vector2 position;
-		protected float scale;
-		protected Color color;
+		public Vector2 position;
+		public float scale;
+		public Color color;
 		/// <summary>
 		/// Creates the Label.
 		/// </summary>
@@ -35,9 +35,8 @@ namespace VoidEngine
 			this.color = color;
 		}
 
-		public virtual void Update(GameTime gameTime, string text2)
+		public virtual void Update(GameTime gameTime)
 		{
-			text = text2;
 		}
 
 		public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
