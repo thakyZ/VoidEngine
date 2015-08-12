@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MonoGame.Framework;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
-namespace VoidEngine
+namespace VoidEngine.Helpers
 {
 	/// <summary>
 	/// This class doesn't always like to work, use as your own descetion.
 	/// </summary>
-	public class Collision
+	public class CollisionHelper
 	{
 		public static float Magnitude(Vector2 vector)
 		{

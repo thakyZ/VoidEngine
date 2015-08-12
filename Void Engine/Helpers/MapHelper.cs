@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Framework;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace VoidEngine
+namespace VoidEngine.Helpers
 {
 	public static class MapHelper
 	{
@@ -15,6 +16,7 @@ namespace VoidEngine
 		/// '.' and ',' return 0.
 		/// '1'-'9', 'a'-'z', 'A'-'Z', and all symbols on a english keyboard
 		/// except ' and " will return 1 to 84 respectifully.
+		/// </summary>
 		public static uint[,] GetTileArray(List<string> lines)
 		{
 			uint[,] tileArray = new uint[lines[0].Length, lines.Count];
@@ -287,27 +289,72 @@ namespace VoidEngine
 					}
 				}
 			}
-			
+
 			return tileArray;
 		}
-		
-		public static Tile.TileCollisions GetCollisions(int x, int y, Tile[,] TileList)
+
+		public static int[,] ImgToLevel(Texture2D texture)
 		{
-			if (x < 0 || x > TileList.GetLength(0) * 35)
+			int[,] tempIntArray = new int[texture.Width, texture.Height];
+			Color[] tempColorArray = new Color[texture.Width * texture.Height];
+			texture.GetData(tempColorArray);
+
+			for (int i = 0; i < tempColorArray.Length; i++)
 			{
-				return Tile.TileCollisions.Impassable;
+				int x = i / texture.Width;
+				int y = i % texture.Width;
+
+				if (tempColorArray[i] == new Color(0, 0, 0, 0))
+				{
+					tempIntArray[y, x] = 0;
+				}
+				if (tempColorArray[i] == new Color(128, 128, 128))
+				{
+					tempIntArray[y, x] = 1;
+				}
+				if (tempColorArray[i] == new Color(0, 114, 70))
+				{
+					tempIntArray[y, x] = 2;
+				}
+				if (tempColorArray[i] == new Color(200, 200, 200))
+				{
+					tempIntArray[y, x] = 3;
+				}
+				if (tempColorArray[i] == new Color(64, 64, 64))
+				{
+					tempIntArray[y, x] = 4;
+				}
+				if (tempColorArray[i] == new Color(255, 255, 0))
+				{
+					tempIntArray[y, x] = 25;
+				}
+				if (tempColorArray[i] == new Color(0, 255, 255))
+				{
+					tempIntArray[y, x] = 77;
+				}
+				if (tempColorArray[i] == new Color(68, 255, 78))
+				{
+					tempIntArray[y, x] = 78;
+				}
+				if (tempColorArray[i] == new Color(174, 85, 167))
+				{
+					tempIntArray[y, x] = 79;
+				}
+				if (tempColorArray[i] == new Color(255, 193, 86))
+				{
+					tempIntArray[y, x] = 80;
+				}
+				if (tempColorArray[i] == new Color(249, 0, 0))
+				{
+					tempIntArray[y, x] = 81;
+				}
+				if (tempColorArray[i] == new Color(255, 142, 217))
+				{
+					tempIntArray[y, x] = 82;
+				}
 			}
-			if (y < 0 || y > TileList.GetLength(1) * 35)
-			{
-				return Tile.TileCollisions.Passable;
-			}
-			
-			return TileList[y, x].tileCollisions;
-		}
-		
-		public static Rectangle GetBounds(int x, int y)
-		{
-			return new Rectangle(x * 35, y * 35, 35, 35);
+
+			return tempIntArray;
 		}
 	}
 }
