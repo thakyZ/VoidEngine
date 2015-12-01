@@ -1,7 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Void Engine", "Void Engine\Void Engine.csproj", "{B5233DA2-7F81-4467-A0C2-E02821D7FBB1}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoidEngine", "VoidEngine\VoidEngine.csproj", "{C70DD6A4-180D-4758-99C0-30E3609F773C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +11,10 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B5233DA2-7F81-4467-A0C2-E02821D7FBB1}.Debug|x86.ActiveCfg = Debug|x86
-		{B5233DA2-7F81-4467-A0C2-E02821D7FBB1}.Debug|x86.Build.0 = Debug|x86
-		{B5233DA2-7F81-4467-A0C2-E02821D7FBB1}.Release|x86.ActiveCfg = Release|x86
-		{B5233DA2-7F81-4467-A0C2-E02821D7FBB1}.Release|x86.Build.0 = Release|x86
+		{C70DD6A4-180D-4758-99C0-30E3609F773C}.Debug|x86.ActiveCfg = Debug|x86
+		{C70DD6A4-180D-4758-99C0-30E3609F773C}.Debug|x86.Build.0 = Debug|x86
+		{C70DD6A4-180D-4758-99C0-30E3609F773C}.Release|x86.ActiveCfg = Release|x86
+		{C70DD6A4-180D-4758-99C0-30E3609F773C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
